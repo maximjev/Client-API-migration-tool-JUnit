@@ -23,7 +23,7 @@ public class FileParser {
             throw new ParsingException("Invalid path");
         }
 
-        if(file.isFile()) {
+        if (file.isFile()) {
             parse(path);
         } else {
             try {
@@ -42,6 +42,9 @@ public class FileParser {
         try {
             String originalCode = Files.readString(path);
             String modifiedCode = tool.migrate(originalCode);
+            if (!originalCode.equals(modifiedCode)) {
+                Files.write(path, modifiedCode.getBytes());
+            }
         } catch (IOException ex) {
             throw new ParsingException("Error while reading file", ex);
         }

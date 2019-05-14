@@ -1,7 +1,9 @@
 package visitors;
 
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
+import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
 public class JUnitImportAndAnnotationVisitor extends VoidVisitorAdapter<Void> {
@@ -9,15 +11,19 @@ public class JUnitImportAndAnnotationVisitor extends VoidVisitorAdapter<Void> {
     @Override
     public void visit(ImportDeclaration n, Void arg) {
         super.visit(n, arg);
-        String oldQualifier = "org.junit";
-        String newPrefix = "org.junit.jupiter.api.";
+        Name oldQualifier = JavaParser.parseName(Constants.OLD_IMPORT.toString());
+        Name newQualifier = JavaParser.parseName(Constants.NEW_IMPORT.toString());
         String newIdentifier = resolveNewAnnotation(n.getName().getIdentifier());
 
         n.getName().getQualifier().ifPresent(q -> {
-            if(q.toString().equals(oldQualifier)) {
-                n.setName(newPrefix + newIdentifier);
+            if(q.equals(oldQualifier)) {
+                n.setName(newIdentifier);
+                n.getName().setQualifier(newQualifier);
             }
         });
+        if(n.isAsterisk() && n.getName().equals(oldQualifier)) {
+            n.setName(newQualifier);
+        }
     }
 
     @Override

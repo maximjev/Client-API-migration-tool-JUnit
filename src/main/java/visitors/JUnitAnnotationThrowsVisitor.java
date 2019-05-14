@@ -12,7 +12,7 @@ import java.util.Iterator;
 
 import static java.lang.String.*;
 
-public class JunitAnnotationThrowsVisitor extends VoidVisitorAdapter<Void> {
+public class JUnitAnnotationThrowsVisitor extends VoidVisitorAdapter<Void> {
 
     @Override
     public void visit(NormalAnnotationExpr n, Void arg) {

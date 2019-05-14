@@ -2,11 +2,10 @@ package tool;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
+import visitors.JUnitAssertVisitor;
 import visitors.JUnitImportAndAnnotationVisitor;
-import visitors.JunitAnnotationThrowsVisitor;
+import visitors.JUnitAnnotationThrowsVisitor;
 
-
-import java.util.Objects;
 
 import static java.util.stream.Collectors.*;
 import static java.util.stream.Stream.of;
@@ -18,7 +17,8 @@ public class JUnitMigrationTool {
                 .map(JavaParser::parse)
                 .map(this::migrateAnnotations)
                 .map(this::migrateExceptionThrowing)
-                .map(Objects::toString)
+                .map(this::migrateAssertions)
+                .map(CompilationUnit::toString)
                 .collect(joining());
     }
 
@@ -28,7 +28,12 @@ public class JUnitMigrationTool {
     }
 
     private CompilationUnit migrateExceptionThrowing(CompilationUnit cu) {
-        new JunitAnnotationThrowsVisitor().visit(cu, null);
+        new JUnitAnnotationThrowsVisitor().visit(cu, null);
+        return cu;
+    }
+
+    private CompilationUnit migrateAssertions(CompilationUnit cu) {
+        new JUnitAssertVisitor().visit(cu, null);
         return cu;
     }
 }

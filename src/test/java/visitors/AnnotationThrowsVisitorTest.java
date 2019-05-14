@@ -1,6 +1,9 @@
+package visitors;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import tool.JUnitMigrationTool;
+import utils.TestUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,6 +11,7 @@ import java.util.stream.Stream;
 
 import static java.lang.String.*;
 import static java.util.stream.Collectors.*;
+import static utils.TestUtils.*;
 
 public class AnnotationThrowsVisitorTest {
 
@@ -24,17 +28,17 @@ public class AnnotationThrowsVisitorTest {
 
         String expected = Stream.of(expectedBody)
                 .map(TestUtils::methodWrap)
-                .map(c -> TestUtils.appendEmptyAnnotation(c, annotation))
+                .map(c -> appendEmptyAnnotation(c, annotation))
                 .map(TestUtils::classWrap)
-                .map(c -> TestUtils.appendImport(c, annotationImport, "Assertions"))
-                .map(c -> TestUtils.appendImport(c, annotationImport, annotation))
+                .map(c -> appendImport(c, annotationImport, "Assertions"))
+                .map(c -> appendImport(c, annotationImport, annotation))
                 .map(TestUtils::prettyPrint)
                 .collect(joining());
 
-        String value = Stream.of(TestUtils.methodWrap(""))
-                .map(c -> TestUtils.appendAnnotation(c, annotation, "expected", exception))
+        String value = Stream.of(methodWrap(""))
+                .map(c -> appendAnnotation(c, annotation, "expected", exception))
                 .map(TestUtils::classWrap)
-                .map(c -> TestUtils.appendImport(c, annotationImport, annotation))
+                .map(c -> appendImport(c, annotationImport, annotation))
                 .map(TestUtils::prettyPrint)
                 .collect(joining());
 
@@ -51,17 +55,17 @@ public class AnnotationThrowsVisitorTest {
 
         String expected = Stream.of(expectedBody)
                 .map(TestUtils::methodWrap)
-                .map(c -> TestUtils.appendAnnotation(c, annotation, "timeout", "5"))
+                .map(c -> appendAnnotation(c, annotation, "timeout", "5"))
                 .map(TestUtils::classWrap)
-                .map(c -> TestUtils.appendImport(c, annotationImport, "Assertions"))
-                .map(c -> TestUtils.appendImport(c, annotationImport, annotation))
+                .map(c -> appendImport(c, annotationImport, "Assertions"))
+                .map(c -> appendImport(c, annotationImport, annotation))
                 .map(TestUtils::prettyPrint)
                 .collect(joining());
 
-        String value = Stream.of(TestUtils.methodWrap(""))
-                .map(c -> TestUtils.appendAnnotations(c, annotation, params))
+        String value = Stream.of(methodWrap(""))
+                .map(c -> appendAnnotations(c, annotation, params))
                 .map(TestUtils::classWrap)
-                .map(c -> TestUtils.appendImport(c, annotationImport, annotation))
+                .map(c -> appendImport(c, annotationImport, annotation))
                 .map(TestUtils::prettyPrint)
                 .collect(joining());
 

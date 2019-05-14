@@ -1,3 +1,5 @@
+package utils;
+
 import com.github.javaparser.JavaParser;
 
 import java.util.Map;
@@ -6,13 +8,13 @@ import static java.lang.String.format;
 
 public class TestUtils {
 
-    public static String CLASS_TEMPLATE = "public class Foo { %s } \n ";
-    public static String METHOD_TEMPLATE = "public void bar() { %s } \n ";
-    public static String ANNOTATION_TEMPLATE = "@%s \n ";
-    public static String EMPTY_ANNOTATION_TEMPLATE = "@%s() \n ";
-    public static String ANNOTATION_PARAM_TEMPLATE = "@%s(%s = %s) \n ";
-    public static String IMPORT_TEMPLATE = "%s ; \n ";
-    public static String IMPORT_PARAM_TEMPLATE = "%s%s ; \n ";
+    private static String CLASS_TEMPLATE = "public class Foo { %s } \n ";
+    private static String METHOD_TEMPLATE = "public void bar() { %s } \n ";
+    private static String ANNOTATION_TEMPLATE = "@%s \n ";
+    private static String EMPTY_ANNOTATION_TEMPLATE = "@%s() \n ";
+    private static String ANNOTATION_PARAM_TEMPLATE = "@%s(%s = %s) \n ";
+    private static String IMPORT_TEMPLATE = "%s ; \n ";
+    private static String IMPORT_PARAM_TEMPLATE = "%s%s ; \n ";
 
     public static String prettyPrint(String code) {
         return JavaParser.parse(code).toString();
@@ -55,7 +57,7 @@ public class TestUtils {
     }
 
     public static String appendAnnotations(String code, String annotation, Map<String, String> params) {
-        StringBuilder builder = new StringBuilder().append("@" + annotation +"(");
+        StringBuilder builder = new StringBuilder().append("@" + annotation + "(");
         params.forEach((key, value) -> builder.append(" " + key + "=" + value + ", "));
         builder.delete(builder.length() - 2, builder.length()).append(") \n");
         builder.append(code);
@@ -63,7 +65,10 @@ public class TestUtils {
     }
 
     public static String constructClassForMethodAnnotation(String annotation, String annotationImport) {
-        return appendImport( annotationImport + annotation,
-                classWrap(appendBeforeEmptyMethod(format(ANNOTATION_TEMPLATE + annotation))));
+        return appendImport(
+                classWrap(appendBeforeEmptyMethod(format(ANNOTATION_TEMPLATE, annotation))),
+                annotationImport,
+                annotation
+        );
     }
 }
