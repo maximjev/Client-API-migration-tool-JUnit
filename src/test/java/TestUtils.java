@@ -1,0 +1,69 @@
+import com.github.javaparser.JavaParser;
+
+import java.util.Map;
+
+import static java.lang.String.format;
+
+public class TestUtils {
+
+    public static String CLASS_TEMPLATE = "public class Foo { %s } \n ";
+    public static String METHOD_TEMPLATE = "public void bar() { %s } \n ";
+    public static String ANNOTATION_TEMPLATE = "@%s \n ";
+    public static String EMPTY_ANNOTATION_TEMPLATE = "@%s() \n ";
+    public static String ANNOTATION_PARAM_TEMPLATE = "@%s(%s = %s) \n ";
+    public static String IMPORT_TEMPLATE = "%s ; \n ";
+    public static String IMPORT_PARAM_TEMPLATE = "%s%s ; \n ";
+
+    public static String prettyPrint(String code) {
+        return JavaParser.parse(code).toString();
+    }
+
+    public static String classWrap(String code) {
+        return format(CLASS_TEMPLATE, code);
+    }
+
+    public static String methodWrap(String code) {
+        return format(METHOD_TEMPLATE, code);
+    }
+
+    public static String appendBeforeEmptyClass(String code) {
+        return code + format(CLASS_TEMPLATE, "");
+    }
+
+    public static String appendBeforeEmptyMethod(String code) {
+        return code + format(METHOD_TEMPLATE, "");
+    }
+
+    public static String appendImport(String code, String importString) {
+        return format(IMPORT_TEMPLATE, importString) + code;
+    }
+
+    public static String appendImport(String code, String importString, String param) {
+        return format(IMPORT_PARAM_TEMPLATE, importString, param) + code;
+    }
+
+    public static String appendAnnotation(String code, String annotation) {
+        return format(ANNOTATION_TEMPLATE, annotation) + code;
+    }
+
+    public static String appendEmptyAnnotation(String code, String annotation) {
+        return format(EMPTY_ANNOTATION_TEMPLATE, annotation) + code;
+    }
+
+    public static String appendAnnotation(String code, String annotation, String param, String value) {
+        return format(ANNOTATION_PARAM_TEMPLATE, annotation, param, value) + code;
+    }
+
+    public static String appendAnnotations(String code, String annotation, Map<String, String> params) {
+        StringBuilder builder = new StringBuilder().append("@" + annotation +"(");
+        params.forEach((key, value) -> builder.append(" " + key + "=" + value + ", "));
+        builder.delete(builder.length() - 2, builder.length()).append(") \n");
+        builder.append(code);
+        return builder.toString();
+    }
+
+    public static String constructClassForMethodAnnotation(String annotation, String annotationImport) {
+        return appendImport( annotationImport + annotation,
+                classWrap(appendBeforeEmptyMethod(format(ANNOTATION_TEMPLATE + annotation))));
+    }
+}
