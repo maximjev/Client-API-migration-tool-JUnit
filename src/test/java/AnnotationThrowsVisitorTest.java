@@ -1,9 +1,9 @@
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import tool.JUnitMigrationTool;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.lang.String.*;

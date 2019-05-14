@@ -1,3 +1,5 @@
+package exception;
+
 public class ParsingException extends RuntimeException {
 
     public ParsingException() {

@@ -1,4 +1,7 @@
-import java.io.IOException;
+import exception.ParsingException;
+import parser.FileParser;
+import tool.JUnitMigrationTool;
+
 import java.nio.file.Paths;
 
 public class Main {
