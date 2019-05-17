@@ -17,7 +17,7 @@ public class JUnitAssertAssumeVisitor extends VoidVisitorAdapter<Void> {
     private static String STRING_REF = "java.lang.String";
 
     private static final Set<String> ASSERT_METHODS = new HashSet<>(
-            Arrays.asList("assertFalse", "assertEquals", "assertNotEquals", "assertArrayEquals", "assertNotSame",
+            Arrays.asList("assertFalse", "assertArrayEquals", "assertNotSame",
                     "assertSame", "assertTrue", "assertNull", "assertNotNull"));
 
     private static final Set<String> ASSUME_METHODS = new HashSet<>(
