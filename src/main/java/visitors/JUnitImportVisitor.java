@@ -2,19 +2,27 @@ package visitors;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.ImportDeclaration;
-import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.Name;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
+import utils.MigrationUtils;
 
-public class JUnitAssertVisitor extends VoidVisitorAdapter<Void> {
+import java.util.stream.Stream;
 
+import static java.util.stream.Collectors.joining;
+import static utils.Constants.NEW_IMPORT;
+import static utils.Constants.OLD_IMPORT;
+
+public class JUnitImportVisitor extends VoidVisitorAdapter<Void> {
     @Override
     public void visit(ImportDeclaration n, Void arg) {
         super.visit(n, arg);
+        Name oldQualifier = JavaParser.parseName(OLD_IMPORT);
+        Name newQualifier = JavaParser.parseName(NEW_IMPORT);
 
-        Name oldQualifier = JavaParser.parseName(Constants.OLD_IMPORT.toString());
-        Name newQualifier = JavaParser.parseName(Constants.NEW_IMPORT.toString());
-        String newIdentifier = resolveNewClass(n.getName().getIdentifier());
+        String newIdentifier = Stream.of(n.getName().getIdentifier())
+                .map(MigrationUtils::resolveNewAnnotation)
+                .map(MigrationUtils::resolveAssertAssume)
+                .collect(joining());
 
         n.getName().getQualifier().ifPresent(q -> {
             if (q.equals(oldQualifier)) {
@@ -25,18 +33,5 @@ public class JUnitAssertVisitor extends VoidVisitorAdapter<Void> {
         if (n.isAsterisk() && n.getName().equals(oldQualifier)) {
             n.setName(newQualifier);
         }
-    }
-
-    @Override
-    public void visit(MethodCallExpr n, Void arg) {
-        super.visit(n, arg);
-
-        if(!n.isClassExpr()) {
-            return;
-        }
-    }
-
-    private String resolveNewClass(String old) {
-        return old.equals("Assert") ? "Assertions" : old;
     }
 }

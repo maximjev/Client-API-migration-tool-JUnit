@@ -12,33 +12,30 @@ import java.util.stream.Stream;
 import static java.lang.String.*;
 import static java.util.stream.Collectors.*;
 import static utils.TestUtils.*;
+import static utils.TestConstants.*;
 
 public class AnnotationThrowsVisitorTest {
 
     private JUnitMigrationTool tool = new JUnitMigrationTool();
 
-
-    String annotation = "Test";
-    String exception = "IllegalArgumentException.class";
-    String annotationImport = "import org.junit.jupiter.api.";
-    String expectedBody = format("Assertions.assertThrows(%s, () -> {\n});", exception);
+    String expectedBody = format("Assertions.assertThrows(%s, () -> {\n});", EXCEPTION_STRING);
 
     @Test
     public void throwsExceptionTest() {
 
         String expected = Stream.of(expectedBody)
                 .map(TestUtils::methodWrap)
-                .map(c -> appendEmptyAnnotation(c, annotation))
+                .map(c -> appendEmptyAnnotation(c, TEST_STRING))
                 .map(TestUtils::classWrap)
-                .map(c -> appendImport(c, annotationImport, "Assertions"))
-                .map(c -> appendImport(c, annotationImport, annotation))
+                .map(c -> appendImport(c, NEW_IMPORT, ASSERTIONS_STRING))
+                .map(c -> appendImport(c, NEW_IMPORT, TEST_STRING))
                 .map(TestUtils::prettyPrint)
                 .collect(joining());
 
         String value = Stream.of(methodWrap(""))
-                .map(c -> appendAnnotation(c, annotation, "expected", exception))
+                .map(c -> appendAnnotation(c, TEST_STRING, EXPECTED_STRING, EXCEPTION_STRING))
                 .map(TestUtils::classWrap)
-                .map(c -> appendImport(c, annotationImport, annotation))
+                .map(c -> appendImport(c, NEW_IMPORT, TEST_STRING))
                 .map(TestUtils::prettyPrint)
                 .collect(joining());
 
@@ -50,22 +47,22 @@ public class AnnotationThrowsVisitorTest {
     @Test
     public void throwsExceptionWithParamsTest() {
         Map<String, String> params = new HashMap<>();
-        params.put("expected", exception);
-        params.put("timeout", "5");
+        params.put(EXPECTED_STRING, EXCEPTION_STRING);
+        params.put(TIMEOUT_STRING, "5");
 
         String expected = Stream.of(expectedBody)
                 .map(TestUtils::methodWrap)
-                .map(c -> appendAnnotation(c, annotation, "timeout", "5"))
+                .map(c -> appendAnnotation(c, TEST_STRING, TIMEOUT_STRING, "5"))
                 .map(TestUtils::classWrap)
-                .map(c -> appendImport(c, annotationImport, "Assertions"))
-                .map(c -> appendImport(c, annotationImport, annotation))
+                .map(c -> appendImport(c, NEW_IMPORT, ASSERTIONS_STRING))
+                .map(c -> appendImport(c, NEW_IMPORT, TEST_STRING))
                 .map(TestUtils::prettyPrint)
                 .collect(joining());
 
         String value = Stream.of(methodWrap(""))
-                .map(c -> appendAnnotations(c, annotation, params))
+                .map(c -> appendAnnotations(c, TEST_STRING, params))
                 .map(TestUtils::classWrap)
-                .map(c -> appendImport(c, annotationImport, annotation))
+                .map(c -> appendImport(c, NEW_IMPORT, TEST_STRING))
                 .map(TestUtils::prettyPrint)
                 .collect(joining());
 

@@ -13,8 +13,8 @@ public class TestUtils {
     private static String ANNOTATION_TEMPLATE = "@%s \n ";
     private static String EMPTY_ANNOTATION_TEMPLATE = "@%s() \n ";
     private static String ANNOTATION_PARAM_TEMPLATE = "@%s(%s = %s) \n ";
-    private static String IMPORT_TEMPLATE = "%s ; \n ";
-    private static String IMPORT_PARAM_TEMPLATE = "%s%s ; \n ";
+    private static String IMPORT_PARAM_TEMPLATE = "import %s%s; \n ";
+    private static String STATIC_IMPORT_TEMPLATE = "import static %s%s.*; \n ";
 
     public static String prettyPrint(String code) {
         return JavaParser.parse(code).toString();
@@ -36,8 +36,8 @@ public class TestUtils {
         return code + format(METHOD_TEMPLATE, "");
     }
 
-    public static String appendImport(String code, String importString) {
-        return format(IMPORT_TEMPLATE, importString) + code;
+    public static String appendStaticImport(String code, String importString, String param) {
+        return format(STATIC_IMPORT_TEMPLATE, importString, param) + code;
     }
 
     public static String appendImport(String code, String importString, String param) {
