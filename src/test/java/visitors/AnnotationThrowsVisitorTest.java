@@ -18,21 +18,21 @@ public class AnnotationThrowsVisitorTest {
 
     private JUnitMigrationTool tool = new JUnitMigrationTool();
 
-    String expectedBody = format("Assertions.assertThrows(%s, () -> {\n});", EXCEPTION_STRING);
+    String expectedBody = format("Assertions.assertThrows(%s, () -> {\n int a = 5;\n});", EXCEPTION_STRING);
 
     @Test
     public void throwsExceptionTest() {
 
         String expected = Stream.of(expectedBody)
                 .map(TestUtils::methodWrap)
-                .map(c -> appendEmptyAnnotation(c, TEST_STRING))
+                .map(c -> appendAnnotation(c, TEST_STRING))
                 .map(TestUtils::classWrap)
                 .map(c -> appendImport(c, NEW_IMPORT, ASSERTIONS_STRING))
                 .map(c -> appendImport(c, NEW_IMPORT, TEST_STRING))
                 .map(TestUtils::prettyPrint)
                 .collect(joining());
 
-        String value = Stream.of(methodWrap(""))
+        String value = Stream.of(methodWrap("int a = 5;\n"))
                 .map(c -> appendAnnotation(c, TEST_STRING, EXPECTED_STRING, EXCEPTION_STRING))
                 .map(TestUtils::classWrap)
                 .map(c -> appendImport(c, NEW_IMPORT, TEST_STRING))
@@ -59,7 +59,7 @@ public class AnnotationThrowsVisitorTest {
                 .map(TestUtils::prettyPrint)
                 .collect(joining());
 
-        String value = Stream.of(methodWrap(""))
+        String value = Stream.of(methodWrap("int a = 5;\n"))
                 .map(c -> appendAnnotations(c, TEST_STRING, params))
                 .map(TestUtils::classWrap)
                 .map(c -> appendImport(c, NEW_IMPORT, TEST_STRING))

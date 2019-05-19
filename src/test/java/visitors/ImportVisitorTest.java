@@ -48,8 +48,8 @@ public class ImportVisitorTest {
     @Test
     public void asteriskImportTest() {
         appendBeforeClassAndAssert(
-                appendImport("", NEW_IMPORT, "*"),
-                appendImport("", OLD_IMPORT,  "*")
+                appendImport("", NEW_IMPORT, ASSERTIONS_STRING + ".*"),
+                appendImport("", OLD_IMPORT,  ASSERT_STRING + ".*")
         );
     }
 

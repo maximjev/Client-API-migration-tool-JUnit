@@ -1,6 +1,7 @@
 package visitors;
 
 import com.github.javaparser.JavaParser;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
@@ -14,7 +15,7 @@ import static utils.MigrationUtils.resolveImportName;
 
 public class JUnitAssertAssumeVisitor extends VoidVisitorAdapter<Void> {
 
-    private static String STRING_REF = "java.lang.String";
+    private static final String STRING_REF = "java.lang.String";
 
     private static final Set<String> ASSERT_METHODS = new HashSet<>(
             Arrays.asList("assertFalse", "assertArrayEquals", "assertNotSame",
@@ -38,14 +39,14 @@ public class JUnitAssertAssumeVisitor extends VoidVisitorAdapter<Void> {
 
         if (n.getScope().isPresent()) {
             if (isAssert(n.getScope().get().toString())) {
-                n.setScope(JavaParser.parseExpression(ASSERTIONS_STRING));
+                n.setScope(StaticJavaParser.parseExpression(ASSERTIONS_STRING));
             }
             if (isAssume(n.getScope().get().toString())) {
-                n.setScope(JavaParser.parseExpression(ASSUMPTIONS_STRING));
+                n.setScope(StaticJavaParser.parseExpression(ASSUMPTIONS_STRING));
             }
         } else {
             String importString = resolveImportName(n);
-            if (!isStaticAssert(importString) && !isStaticAssume(importString)) {
+            if (!isStatic(importString)) {
                 return;
             }
 
@@ -53,7 +54,7 @@ public class JUnitAssertAssumeVisitor extends VoidVisitorAdapter<Void> {
 
         Expression argument = n.getArgument(0);
 
-        if (argument.calculateResolvedType().describe().equals(STRING_REF) ||
+        if (resolveImportName(argument).equals(STRING_REF) ||
                 (isStringOverridenMethod(n.getNameAsString()) && n.getArguments().size() == 3)) {
             n.getArguments().removeFirst();
             n.getArguments().addLast(argument);
@@ -64,20 +65,17 @@ public class JUnitAssertAssumeVisitor extends VoidVisitorAdapter<Void> {
         return ASSERT_STRING.equals(className);
     }
 
-    private boolean isStaticAssert(String importString) {
-        return importString.equals(OLD_IMPORT + "." + ASSERT_STRING);
-    }
-
     private boolean isAssume(String className) {
         return ASSUME_STRING.equals(className);
     }
 
-    private boolean isStaticAssume(String importString) {
-        return importString.equals(OLD_IMPORT + "." + ASSUME_STRING);
+    private boolean isStatic(String importString) {
+        return importString.equals(OLD_IMPORT + "." + ASSUME_STRING)
+                || importString.equals(OLD_IMPORT + "." + ASSERT_STRING);
     }
 
     private boolean isAssertMethod(String method) {
-        return ASSERT_METHODS.contains(method);
+        return ASSERT_METHODS.contains(method) || ASSERT_OVERRIDEN_METHODS.contains(method);
     }
 
     private boolean isAssumeMethod(String method) {

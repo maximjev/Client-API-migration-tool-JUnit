@@ -1,6 +1,7 @@
 package utils;
 
 import com.github.javaparser.JavaParser;
+import com.github.javaparser.StaticJavaParser;
 
 import java.util.Map;
 
@@ -11,13 +12,12 @@ public class TestUtils {
     private static String CLASS_TEMPLATE = "public class Foo { %s } \n ";
     private static String METHOD_TEMPLATE = "public void bar() { %s } \n ";
     private static String ANNOTATION_TEMPLATE = "@%s \n ";
-    private static String EMPTY_ANNOTATION_TEMPLATE = "@%s() \n ";
     private static String ANNOTATION_PARAM_TEMPLATE = "@%s(%s = %s) \n ";
     private static String IMPORT_PARAM_TEMPLATE = "import %s%s; \n ";
     private static String STATIC_IMPORT_TEMPLATE = "import static %s%s.*; \n ";
 
     public static String prettyPrint(String code) {
-        return JavaParser.parse(code).toString();
+        return StaticJavaParser.parse(code).toString();
     }
 
     public static String classWrap(String code) {
@@ -46,10 +46,6 @@ public class TestUtils {
 
     public static String appendAnnotation(String code, String annotation) {
         return format(ANNOTATION_TEMPLATE, annotation) + code;
-    }
-
-    public static String appendEmptyAnnotation(String code, String annotation) {
-        return format(EMPTY_ANNOTATION_TEMPLATE, annotation) + code;
     }
 
     public static String appendAnnotation(String code, String annotation, String param, String value) {

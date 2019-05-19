@@ -1,17 +1,25 @@
 package visitors;
 
 import com.github.javaparser.JavaParser;
+import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.Parameter;
+import com.github.javaparser.ast.expr.LambdaExpr;
 import com.github.javaparser.ast.expr.MemberValuePair;
+import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NormalAnnotationExpr;
+import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.ast.stmt.ExpressionStmt;
+import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
+import com.github.javaparser.printer.PrettyPrinter;
 import org.junit.jupiter.api.Assertions;
 
 import java.util.Iterator;
 
-import static java.lang.String.*;
-import static utils.Constants.EXPECTED_STRING;
-import static utils.Constants.TEST_STRING;
+import static utils.Constants.*;
 
 public class JUnitAnnotationThrowsVisitor extends VoidVisitorAdapter<Void> {
 
@@ -32,16 +40,32 @@ public class JUnitAnnotationThrowsVisitor extends VoidVisitorAdapter<Void> {
                 continue;
             }
 
-            MethodDeclaration node = (MethodDeclaration) n.getParentNode().get();
-            if (!node.getBody().isPresent()) {
+            MethodDeclaration method = (MethodDeclaration) n.getParentNode().get();
+            if (!method.getBody().isPresent()) {
                 continue;
             }
 
-            String line = format("{ Assertions.assertThrows(%s, () -> %s); }", exception, node.getBody().get().toString());
             n.tryAddImportToParentCompilationUnit(Assertions.class);
-            node.setBody(JavaParser.parseBlock(line));
+
+            method.setBody(new BlockStmt(new NodeList<>(constructLambdaStatement(method.getBody().get(), exception))));
 
             i.remove();
+            if (n.getPairs().isEmpty()) {
+                n.replace(StaticJavaParser.parseAnnotation("@" + TEST_STRING));
+            }
+            break;
         }
+    }
+
+    private ExpressionStmt constructLambdaStatement(BlockStmt body, String exception) {
+        LambdaExpr lambda = new LambdaExpr()
+                .setBody(body)
+                .setEnclosingParameters(true);
+
+        return new ExpressionStmt(
+                new MethodCallExpr(StaticJavaParser.parseExpression(ASSERTIONS_STRING), "assertThrows")
+                        .addArgument(exception)
+                        .addArgument(lambda)
+        );
     }
 }

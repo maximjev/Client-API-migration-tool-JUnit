@@ -43,7 +43,10 @@ public class FileParser {
             String originalCode = Files.readString(path);
             String modifiedCode = tool.migrate(originalCode);
             if (!originalCode.equals(modifiedCode)) {
+                System.out.println("Modifying file: " + path.getFileName());
                 Files.write(path, modifiedCode.getBytes());
+            } else {
+                System.out.println("No changes applied to: " + path.getFileName());
             }
         } catch (IOException ex) {
             throw new ParsingException("Error while reading file", ex);
