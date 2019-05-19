@@ -9,15 +9,17 @@ import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinte
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
+import com.google.common.collect.ImmutableList;
 import exception.ParsingException;
-import visitors.JUnitAssertAssumeVisitor;
-import visitors.JUnitAnnotationVisitor;
-import visitors.JUnitAnnotationThrowsVisitor;
-import visitors.JUnitImportVisitor;
+import visitors.*;
 
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static java.util.stream.Collectors.*;
 import static java.util.stream.Stream.of;
+import static utils.MigrationUtils.resolveAnnotationImport;
 
 public class JUnitMigrationTool {
 
@@ -26,13 +28,13 @@ public class JUnitMigrationTool {
 
         return of(code)
                 .map(StaticJavaParser::parse)
-//                .map(LexicalPreservingPrinter::setup)
+                .map(LexicalPreservingPrinter::setup)
                 .map(this::migrateExceptionThrowing)
+                .map(this::migrateImports)
                 .map(this::migrateAnnotations)
                 .map(this::migrateAssertions)
-                .map(this::migrateImports)
-//                .map(LexicalPreservingPrinter::print)
-                .map(ConcreteSyntaxModel::genericPrettyPrint)
+                .map(LexicalPreservingPrinter::print)
+//                .map(ConcreteSyntaxModel::genericPrettyPrint)
                 .collect(joining());
     }
 
@@ -49,6 +51,7 @@ public class JUnitMigrationTool {
 
     private CompilationUnit migrateAnnotations(CompilationUnit cu) {
         new JUnitAnnotationVisitor().visit(cu, null);
+
         return cu;
     }
 

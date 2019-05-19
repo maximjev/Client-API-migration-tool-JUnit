@@ -4,12 +4,12 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.types.ResolvedType;
+import exception.ParsingException;
+import org.junit.jupiter.api.*;
 
 import static utils.Constants.*;
 
 public class MigrationUtils {
-
-    private static JavaParser parser = new JavaParser();
 
     public static String resolveAssertAssume(String old) {
         switch (old) {
@@ -32,6 +32,25 @@ public class MigrationUtils {
             return type.describe();
         } catch (UnsolvedSymbolException ex) {
             return ex.getName();
+        } catch(RuntimeException ex) {
+            return "";
+        }
+    }
+
+    public static Class resolveAnnotationImport(String annotation) {
+        switch (annotation) {
+            case "BeforeEach":
+                return BeforeEach.class;
+            case "AfterEach":
+                return AfterEach.class;
+            case "BeforeAll":
+                return BeforeAll.class;
+            case "AfterAll":
+                return AfterAll.class;
+            case "Disabled":
+                return Disabled.class;
+            default:
+                throw new ParsingException("Annotation not resolved");
         }
     }
 }

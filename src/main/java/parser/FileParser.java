@@ -29,7 +29,7 @@ public class FileParser {
             try {
                 Stream<Path> pathStream = Files.walk(path);
                 pathStream
-                        .filter(p -> p.endsWith(".java") && p.toFile().isFile())
+                        .filter(p -> p.toString().endsWith(".java") && p.toFile().isFile())
                         .forEach(this::parse);
                 pathStream.close();
             } catch (IOException ex) {

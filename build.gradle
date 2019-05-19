@@ -7,6 +7,17 @@ version '1.0-SNAPSHOT'
 
 sourceCompatibility = 1.8
 
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Implementation-Title': 'JUnit-4-to-5-migration',
+                'Implementation-Version': version,
+                'Main-Class': 'main.Main'
+    }
+    baseName = project.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
 repositories {
     mavenCentral()
 }

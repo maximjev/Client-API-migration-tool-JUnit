@@ -6,7 +6,10 @@ import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
 
+import java.util.List;
+
 import static utils.MigrationUtils.resolveAnnotation;
+import static utils.MigrationUtils.resolveAnnotationImport;
 
 public class JUnitAnnotationVisitor extends VoidVisitorAdapter<Void> {
 

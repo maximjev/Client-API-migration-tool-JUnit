@@ -23,11 +23,11 @@ public class JUnitImportVisitor extends VoidVisitorAdapter<Void> {
             n.getName().getQualifier().ifPresent(q -> {
                 n.replace(parseStaticImport(resolveIdentifier(q.getIdentifier()), n.getName().getIdentifier()));
             });
-        } else {
-            if (isClassImport(n)) {
-                n.setName(resolveIdentifier(n.getName().getIdentifier()));
-                n.getName().setQualifier(StaticJavaParser.parseName(NEW_IMPORT));
-            }
+        } else if (isClassImport(n)) {
+            n.setName(resolveIdentifier(n.getName().getIdentifier()));
+            n.getName().setQualifier(StaticJavaParser.parseName(NEW_IMPORT));
+        } else if (isAsteriskImport(n)) {
+            n.setName(StaticJavaParser.parseName(NEW_IMPORT));
         }
     }
 
@@ -40,10 +40,14 @@ public class JUnitImportVisitor extends VoidVisitorAdapter<Void> {
 
     private boolean isStaticClassImport(ImportDeclaration n) {
         Name oldQualifier = StaticJavaParser.parseName(OLD_IMPORT);
-        return (n.isAsterisk() || n.isStatic())
+        return (n.isStatic()
                 && n.getName().getQualifier().isPresent()
                 && n.getName().getQualifier().get().getQualifier().isPresent()
-                && n.getName().getQualifier().get().getQualifier().get().equals(oldQualifier);
+                && n.getName().getQualifier().get().getQualifier().get().equals(oldQualifier));
+    }
+
+    private boolean isAsteriskImport(ImportDeclaration n) {
+        return (n.isAsterisk() && n.getNameAsString().equals(OLD_IMPORT));
     }
 
     private boolean isClassImport(ImportDeclaration n) {

@@ -10,7 +10,6 @@ public class Constants {
             "AfterClass", "AfterAll",
             "Ignore", "Disabled");
 
-
     public static final String NEW_IMPORT = "org.junit.jupiter.api";
     public static final String OLD_IMPORT = "org.junit";
     public static final String ASSERT_STRING = "Assert";

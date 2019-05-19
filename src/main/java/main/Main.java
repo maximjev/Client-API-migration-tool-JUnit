@@ -1,3 +1,5 @@
+package main;
+
 import exception.ParsingException;
 import parser.FileParser;
 import tool.JUnitMigrationTool;
@@ -15,6 +17,4 @@ public class Main {
 
         parser.navigateDir(Paths.get(args[0]));
     }
-
-
 }

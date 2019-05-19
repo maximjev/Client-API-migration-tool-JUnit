@@ -11,6 +11,7 @@ import com.github.javaparser.ast.expr.MemberValuePair;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NormalAnnotationExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.ast.stmt.EmptyStmt;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
@@ -30,36 +31,33 @@ public class JUnitAnnotationThrowsVisitor extends VoidVisitorAdapter<Void> {
             return;
         }
 
-        Iterator<MemberValuePair> i = n.getPairs().iterator();
-        while (i.hasNext()) {
-            MemberValuePair p = i.next();
+        n.getPairs().forEach(p -> {
             String exception;
-            if (p.getName().getIdentifier().equals(EXPECTED_STRING)) {
+            if (p.getName().getIdentifier().equals(EXPECTED_STRING)
+                    && n.getParentNode().isPresent()) {
                 exception = p.getValue().toString();
             } else {
-                continue;
+                return;
             }
 
             MethodDeclaration method = (MethodDeclaration) n.getParentNode().get();
             if (!method.getBody().isPresent()) {
-                continue;
+                return;
             }
 
             n.tryAddImportToParentCompilationUnit(Assertions.class);
 
-            method.setBody(new BlockStmt(new NodeList<>(constructLambdaStatement(method.getBody().get(), exception))));
+            NodeList<Statement> methodBody = new NodeList<>(
+                    constructLambdaStatement(method.getBody().get().getStatements(), exception));
 
-            i.remove();
-            if (n.getPairs().isEmpty()) {
-                n.replace(StaticJavaParser.parseAnnotation("@" + TEST_STRING));
-            }
-            break;
-        }
+            method.setBody(new BlockStmt(methodBody));
+            n.replace(StaticJavaParser.parseAnnotation("@" + TEST_STRING));
+        });
     }
 
-    private ExpressionStmt constructLambdaStatement(BlockStmt body, String exception) {
+    private ExpressionStmt constructLambdaStatement(NodeList<Statement> body, String exception) {
         LambdaExpr lambda = new LambdaExpr()
-                .setBody(body)
+                .setBody(new BlockStmt(body))
                 .setEnclosingParameters(true);
 
         return new ExpressionStmt(
