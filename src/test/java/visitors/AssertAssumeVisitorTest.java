@@ -41,7 +41,7 @@ public class AssertAssumeVisitorTest {
                 .map(c -> appendImport(c, OLD_IMPORT, ASSERT_STRING))
                 .collect(joining());
 
-        assertEquals(expected, tool.migrate(original));
+        parseAndAssertEquals(expected, original);
     }
 
     @Test
@@ -59,7 +59,7 @@ public class AssertAssumeVisitorTest {
                 .map(c -> appendImport(c, OLD_IMPORT, ASSERT_STRING))
                 .collect(joining());
 
-        assertEquals(expected, tool.migrate(original));
+        parseAndAssertEquals(expected, original);
     }
 
     @Test
@@ -84,7 +84,7 @@ public class AssertAssumeVisitorTest {
                     .map(c -> appendImport(c, OLD_IMPORT, ASSERT_STRING))
                     .collect(joining());
 
-            assertEquals(expected, tool.migrate(original));
+            parseAndAssertEquals(expected, original);
         });
     }
 
@@ -110,7 +110,7 @@ public class AssertAssumeVisitorTest {
                     .map(c -> appendImport(c, OLD_IMPORT, ASSERT_STRING))
                     .collect(joining());
 
-            assertEquals(expected, tool.migrate(original));
+            parseAndAssertEquals(expected, original);
         });
     }
 
@@ -129,7 +129,7 @@ public class AssertAssumeVisitorTest {
                 .map(c -> appendImport(c, OLD_IMPORT, ASSERT_STRING))
                 .collect(joining());
 
-        assertEquals(expected, tool.migrate(original));
+        parseAndAssertEquals(expected, original);
     }
 
     @Test
@@ -149,7 +149,7 @@ public class AssertAssumeVisitorTest {
                 .map(c -> appendImport(c, OLD_IMPORT, ASSERT_STRING))
                 .collect(joining());
 
-        assertEquals(expected, tool.migrate(original));
+        parseAndAssertEquals(expected, original);
     }
 
     @Test
@@ -167,6 +167,10 @@ public class AssertAssumeVisitorTest {
                 .map(c -> appendStaticImport(c, OLD_IMPORT, ASSERT_STRING))
                 .collect(joining());
 
-        assertEquals(expected, tool.migrate(original));
+        parseAndAssertEquals(expected, original);
+    }
+
+    private void parseAndAssertEquals(String expected, String original) {
+        assertEquals(expected, prettyPrint(tool.migrate(original)));
     }
 }

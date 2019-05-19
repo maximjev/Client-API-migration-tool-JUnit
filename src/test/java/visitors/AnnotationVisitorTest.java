@@ -12,6 +12,7 @@ import static java.util.stream.Collectors.joining;
 import static utils.TestConstants.NEW_IMPORT;
 import static utils.TestConstants.OLD_IMPORT;
 import static utils.TestUtils.constructClassForMethodAnnotation;
+import static utils.TestUtils.prettyPrint;
 
 public class AnnotationVisitorTest {
 
@@ -39,6 +40,6 @@ public class AnnotationVisitorTest {
                 .map(i -> constructClassForMethodAnnotation(oldAnnotation, i))
                 .collect(joining());
 
-        Assertions.assertEquals(expected, tool.migrate(value));
+        Assertions.assertEquals(expected, prettyPrint(tool.migrate(value)));
     }
 }

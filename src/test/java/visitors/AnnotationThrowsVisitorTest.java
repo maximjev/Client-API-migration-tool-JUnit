@@ -39,7 +39,7 @@ public class AnnotationThrowsVisitorTest {
                 .map(TestUtils::prettyPrint)
                 .collect(joining());
 
-        String result = tool.migrate(value);
+        String result = prettyPrint(tool.migrate(value));
 
         Assertions.assertEquals(expected, result);
     }
@@ -52,7 +52,7 @@ public class AnnotationThrowsVisitorTest {
 
         String expected = Stream.of(expectedBody)
                 .map(TestUtils::methodWrap)
-                .map(c -> appendAnnotation(c, TEST_STRING, TIMEOUT_STRING, "5"))
+                .map(c -> appendAnnotation(c, TEST_STRING))
                 .map(TestUtils::classWrap)
                 .map(c -> appendImport(c, NEW_IMPORT, ASSERTIONS_STRING))
                 .map(c -> appendImport(c, NEW_IMPORT, TEST_STRING))
@@ -66,7 +66,7 @@ public class AnnotationThrowsVisitorTest {
                 .map(TestUtils::prettyPrint)
                 .collect(joining());
 
-        String result = tool.migrate(value);
+        String result = prettyPrint(tool.migrate(value));
         Assertions.assertEquals(expected, result);
     }
 }

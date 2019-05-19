@@ -16,6 +16,8 @@ import static utils.MigrationUtils.resolveImportName;
 
 public class JUnitAssertAssumeVisitor extends VoidVisitorAdapter<Void> {
 
+    private static final String STRING_REF = "java.lang.String";
+
     private static final Set<String> ASSERT_METHODS = new HashSet<>(
             Arrays.asList("assertFalse", "assertArrayEquals", "assertNotSame",
                     "assertSame", "assertTrue", "assertNull", "assertNotNull"));
@@ -47,7 +49,7 @@ public class JUnitAssertAssumeVisitor extends VoidVisitorAdapter<Void> {
         }
 
         Expression argument = n.getArgument(0);
-        if (argument instanceof StringLiteralExpr ||
+        if (resolveImportName(argument).equals(STRING_REF) ||
                 (isStringOverridenMethod(n.getNameAsString()) && n.getArguments().size() == 3)) {
             n.getArguments().removeFirst();
             n.getArguments().addLast(argument);

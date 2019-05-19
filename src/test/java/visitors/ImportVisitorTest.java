@@ -42,14 +42,15 @@ public class ImportVisitorTest {
 
 
     private void appendBeforeClassAndAssert(String expected, String original) {
-        Assertions.assertEquals(prettyPrint(appendBeforeEmptyClass(expected)), tool.migrate(appendBeforeEmptyClass(original)));
+        Assertions.assertEquals(prettyPrint(appendBeforeEmptyClass(expected)),
+                prettyPrint(tool.migrate(appendBeforeEmptyClass(original))));
     }
 
     @Test
     public void asteriskImportTest() {
         appendBeforeClassAndAssert(
                 appendImport("", NEW_IMPORT, ASSERTIONS_STRING + ".*"),
-                appendImport("", OLD_IMPORT,  ASSERT_STRING + ".*")
+                appendImport("", OLD_IMPORT, ASSERT_STRING + ".*")
         );
     }
 
