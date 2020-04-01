@@ -1,20 +1,35 @@
 package main;
 
-import exception.ParsingException;
-import parser.FileParser;
-import tool.JUnitMigrationTool;
+import api.entity.MigrationAnnotationUnit;
+import api.entity.MigrationMethodUnit;
+import api.service.MigrationChangeSet;
+import exception.FileProcessingException;
+import impl.MigrationChangeSetImpl;
+import impl.entity.MigrationAnnotationUnitImpl;
+import impl.entity.MigrationUnitWithClassImpl;
+import impl.MigrationPackageImpl;
+import processor.FileProcessor;
+import junit.JUnitMigrationTool;
+import api.entity.MigrationUnit;
 
-import java.nio.file.Paths;
+import java.util.*;
 
 public class Main {
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         if (args.length == 0) {
-            throw new ParsingException("No path provided");
+            throw new FileProcessingException("No path provided");
         }
 
-        FileParser parser = new FileParser(new JUnitMigrationTool());
 
-        parser.navigateDir(Paths.get(args[0]));
+        List<MigrationAnnotationUnit> nodes = Arrays.asList(
+                new MigrationAnnotationUnitImpl("org.junit.Before", "org.junit.jupiter.api.BeforeEach"),
+                new MigrationAnnotationUnitImpl("org.junit.After", "org.junit.jupiter.api.AfterEach")
+        );
+
+        MigrationChangeSet changeSet = new MigrationChangeSetImpl(new HashMap<>());
+
+        MigrationPackageImpl migrationPackage = new MigrationPackageImpl(nodes, new ArrayList<MigrationMethodUnit>());
+        new FileProcessor(new JUnitMigrationTool(migrationPackage, changeSet)).process(args[0]);
     }
 }
