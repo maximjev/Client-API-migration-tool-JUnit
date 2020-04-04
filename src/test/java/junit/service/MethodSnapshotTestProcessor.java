@@ -1,4 +1,4 @@
-package junit.annotations;
+package junit.service;
 
 import junit.MigrationToolFactory;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -23,7 +23,11 @@ public class MethodSnapshotTestProcessor {
     @ParameterizedTest(name = "{0} test")
     @ValueSource(strings = {
             "AssertEquals",
-            "AssertEqualsStatic"
+            "AssertEqualsStatic",
+            "AssertEqualsStaticAsterisk",
+            "AssumeTrue",
+            "AssumeTrueStatic",
+            "AssumeTrueStaticAsterisk"
     })
     void process(String testcaseName) throws Exception {
         Path testCase = Paths.get(TEST_CASE_DIRECTORY, testcaseName + JAVA);

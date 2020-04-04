@@ -1,6 +1,8 @@
 package service;
 
-import api.entity.MigrationAnnotationUnit;
+import api.entity.MigrationClassUnit;
+import api.entity.MigrationMethodUnit;
+import api.entity.types.MigrationUnitWithMethod;
 import api.service.MigrationChangeSet;
 import api.service.MigrationPackage;
 import api.service.MigrationService;
@@ -9,8 +11,9 @@ import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
+import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import impl.MigrationChangeSetImpl;
-import impl.matcher.MigrationUnitWithClassMatcher;
+import impl.matcher.MigrationUnitMatcher;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -19,9 +22,8 @@ import java.util.Map;
 
 public class AnnotationMigrationService implements MigrationService {
 
-    private List<MigrationAnnotationUnit> units = Collections.emptyList();
-
-    private MigrationUnitWithClassMatcher<NodeWithName, MigrationAnnotationUnit> matcher = new MigrationUnitWithClassMatcher<>();
+    private List<MigrationClassUnit> units = Collections.emptyList();
+    private MigrationUnitMatcher<NodeWithName, MigrationClassUnit, NodeWithSimpleName, MigrationMethodUnit> matcher = new MigrationUnitMatcher<>();
 
     @Override
     public MigrationService setup(MigrationPackage mu) {
@@ -37,21 +39,10 @@ public class AnnotationMigrationService implements MigrationService {
                 .forEach(n -> matcher.findByIdentifier(n, units)
                         .ifPresent(u -> changeSet.put(n, new MarkerAnnotationExpr(u.getNewIdentifier()))));
 
-        cu.findAll(ImportDeclaration.class, n -> matcher.matchesQualifier(n, units))
-                .stream()
-                .filter(ImportDeclaration::isAsterisk)
-                .forEach(n -> matcher.findByQualifier(n, units)
-                        .ifPresent(u -> changeSet.put(n, new ImportDeclaration(u.getNewQualifier(), n.isStatic(), true))));
-
-        cu.findAll(ImportDeclaration.class, n -> matcher.matchesName(n, units))
-                .forEach(n -> matcher.findByName(n, units)
-                        .ifPresent(u -> changeSet.put(n, new ImportDeclaration(u.getNewName(), n.isStatic(), false))));
-
-
         return new MigrationChangeSetImpl(changeSet);
     }
 
-    private boolean hasImport(CompilationUnit cu, List<MigrationAnnotationUnit> units) {
+    private boolean hasImport(CompilationUnit cu, List<MigrationClassUnit> units) {
         return !cu.findAll(ImportDeclaration.class, n -> matcher.matchesQualifier(n, units)).isEmpty()
                 || !cu.findAll(ImportDeclaration.class, n -> matcher.matchesName(n, units)).isEmpty();
     }

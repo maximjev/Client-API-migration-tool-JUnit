@@ -1,5 +1,6 @@
 package service;
 
+import api.entity.MigrationClassUnit;
 import api.entity.MigrationMethodUnit;
 import api.service.MigrationChangeSet;
 import api.service.MigrationPackage;
@@ -13,8 +14,7 @@ import com.github.javaparser.ast.expr.NameExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import impl.MigrationChangeSetImpl;
-import impl.matcher.MigrationUnitWithClassMatcher;
-import impl.matcher.MigrationUnitWithMethodMatcher;
+import impl.matcher.MigrationUnitMatcher;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -25,8 +25,7 @@ public class MethodMigrationService implements MigrationService {
 
     private List<MigrationMethodUnit> units = Collections.emptyList();
 
-    private MigrationUnitWithClassMatcher<NodeWithName, MigrationMethodUnit> classMatcher = new MigrationUnitWithClassMatcher<>();
-    private MigrationUnitWithMethodMatcher<NodeWithSimpleName, MigrationMethodUnit> methodMatcher = new MigrationUnitWithMethodMatcher<>();
+    private MigrationUnitMatcher<NodeWithName, MigrationMethodUnit, NodeWithSimpleName, MigrationMethodUnit> matcher = new MigrationUnitMatcher<>();
 
     @Override
     public MigrationService setup(MigrationPackage mu) {
@@ -38,11 +37,11 @@ public class MethodMigrationService implements MigrationService {
     public MigrationChangeSet migrate(CompilationUnit cu) {
         Map<Node, Node> changeSet = new HashMap<>();
 
-        cu.findAll(MethodCallExpr.class, n -> methodMatcher.matchesMethod(n, units) && hasImport(cu, units))
-                .forEach(n -> methodMatcher.findByMethod(n, units)
+        cu.findAll(MethodCallExpr.class, n -> matcher.matchesMethod(n, units) && hasImport(cu, units))
+                .forEach(n -> matcher.findByMethod(n, units)
                         .ifPresent(u -> {
                             Expression scope = null;
-                            if(n.getScope().isPresent()) {
+                            if (n.getScope().isPresent()) {
                                 scope = new NameExpr(u.getNewIdentifier());
                             }
                             MethodCallExpr expr = new MethodCallExpr(scope, u.getNewMethod(), n.getArguments());
@@ -53,8 +52,8 @@ public class MethodMigrationService implements MigrationService {
     }
 
     private boolean hasImport(CompilationUnit cu, List<MigrationMethodUnit> units) {
-        return !cu.findAll(ImportDeclaration.class, n -> classMatcher.matchesQualifier(n, units) && n.isAsterisk()).isEmpty()
-                || !cu.findAll(ImportDeclaration.class, n -> classMatcher.matchesName(n, units)).isEmpty()
-                || !cu.findAll(ImportDeclaration.class, n -> methodMatcher.matchesStaticMethod(n, units) && n.isStatic());
+        return !(cu.findAll(ImportDeclaration.class, n -> matcher.matchesQualifier(n, units) && n.isAsterisk()).isEmpty()
+                && cu.findAll(ImportDeclaration.class, n -> matcher.matchesName(n, units)).isEmpty()
+                && cu.findAll(ImportDeclaration.class, n -> matcher.matchesStaticMethod(n, units) && n.isStatic()).isEmpty());
     }
 }

@@ -1,12 +1,12 @@
 package impl.entity;
 
-import api.matcher.MigrationUnitWithClass;
+import api.entity.MigrationClassUnit;
 
-public abstract class MigrationUnitWithClassImpl implements MigrationUnitWithClass {
+public class MigrationClassUnitImpl implements MigrationClassUnit {
     private String oldName;
     private String newName;
 
-    public MigrationUnitWithClassImpl(String oldName, String newName) {
+    public MigrationClassUnitImpl(String oldName, String newName) {
         this.oldName = oldName;
         this.newName = newName;
     }

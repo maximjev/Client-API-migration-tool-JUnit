@@ -1,4 +1,4 @@
-package junit.annotations;
+package junit.service;
 
 import junit.MigrationToolFactory;
 import org.junit.jupiter.params.ParameterizedTest;

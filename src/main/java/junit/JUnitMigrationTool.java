@@ -11,12 +11,10 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSol
 import service.AnnotationMigrationService;
 import api.service.MigrationPackage;
 import api.service.MigrationTool;
-import junit.visitors.*;
 import service.ImportMigrationService;
 import service.MethodMigrationService;
 
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -26,11 +24,9 @@ import static java.util.stream.Stream.of;
 
 public class JUnitMigrationTool implements MigrationTool {
     private MigrationPackage migrationPackage;
-    private MigrationChangeSet changeSet;
 
-    public JUnitMigrationTool(MigrationPackage migrationPackage, MigrationChangeSet changeSet) {
+    public JUnitMigrationTool(MigrationPackage migrationPackage) {
         this.migrationPackage = migrationPackage;
-        this.changeSet = changeSet;
     }
 
     public String migrate(String code) {

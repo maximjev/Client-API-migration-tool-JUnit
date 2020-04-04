@@ -1,4 +1,4 @@
-package api.matcher;
+package api.entity.types;
 
 import api.entity.MigrationUnit;
 
