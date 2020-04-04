@@ -2,7 +2,6 @@ package api.service;
 
 import api.entity.MigrationClassUnit;
 import api.entity.MigrationMethodUnit;
-import api.entity.types.MigrationUnitWithClass;
 
 import java.util.List;
 
@@ -13,5 +12,5 @@ public interface MigrationPackage {
 
     List<MigrationClassUnit> getImports();
 
-    List<MigrationMethodUnit> getStaticImports();
+    List<MigrationMethodUnit> getStaticMethodImports();
 }

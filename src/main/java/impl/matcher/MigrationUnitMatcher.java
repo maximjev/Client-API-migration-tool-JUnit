@@ -47,15 +47,15 @@ public class MigrationUnitMatcher<T extends NodeWithName, N extends MigrationCla
     }
 
     private boolean matchesIdentifier(T node, N unit) {
-        return unit.getOldIdentifier().equals(node.getName().getIdentifier());
+        return unit.getOriginalIdentifier().equals(node.getName().getIdentifier());
     }
 
     private boolean matchesQualifier(T node, N unit) {
-        return unit.getOldQualifier().equals(node.getName().asString());
+        return unit.getOriginalQualifier().equals(node.getName().asString());
     }
 
     private boolean matchesName(T node, N unit) {
-        return unit.getOldName().equals(node.getNameAsString());
+        return unit.getOriginalName().equals(node.getNameAsString());
     }
 
     private Optional<M> findMethodByPredicate(List<M> units, Predicate<? super M> predicate) {
@@ -73,7 +73,7 @@ public class MigrationUnitMatcher<T extends NodeWithName, N extends MigrationCla
     }
 
     private boolean matchesMethod(S node, M unit) {
-        return unit.getOldMethod().equals(node.getNameAsString());
+        return unit.getOriginalMethod().equals(node.getNameAsString());
     }
 
     public Optional<M> findByStaticMethod(T node, List<M> units) {
@@ -85,6 +85,6 @@ public class MigrationUnitMatcher<T extends NodeWithName, N extends MigrationCla
     }
 
     private boolean matchesStaticMethod(T node, M unit) {
-        return unit.getOldFullName().equals(node.getNameAsString());
+        return unit.getOriginalFullName().equals(node.getNameAsString());
     }
 }

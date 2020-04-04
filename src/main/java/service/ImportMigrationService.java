@@ -27,7 +27,7 @@ public class ImportMigrationService implements MigrationService {
 
     @Override
     public MigrationService setup(MigrationPackage mu) {
-        staticUnits = mu.getStaticImports();
+        staticUnits = mu.getStaticMethodImports();
         importUnits = mu.getImports();
         return this;
     }

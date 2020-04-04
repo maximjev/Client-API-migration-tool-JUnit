@@ -3,17 +3,17 @@ package impl.entity;
 import api.entity.MigrationClassUnit;
 
 public class MigrationClassUnitImpl implements MigrationClassUnit {
-    private String oldName;
+    private String originalName;
     private String newName;
 
-    public MigrationClassUnitImpl(String oldName, String newName) {
-        this.oldName = oldName;
+    public MigrationClassUnitImpl(String originalName, String newName) {
+        this.originalName = originalName;
         this.newName = newName;
     }
 
     @Override
-    public String getOldName() {
-        return oldName;
+    public String getOriginalName() {
+        return originalName;
     }
 
     @Override
@@ -22,8 +22,8 @@ public class MigrationClassUnitImpl implements MigrationClassUnit {
     }
 
     @Override
-    public String getOldIdentifier() {
-        return getLastToken(oldName);
+    public String getOriginalIdentifier() {
+        return getLastToken(originalName);
     }
 
     @Override
@@ -32,8 +32,8 @@ public class MigrationClassUnitImpl implements MigrationClassUnit {
     }
 
     @Override
-    public String getOldQualifier() {
-        return getQualifier(oldName);
+    public String getOriginalQualifier() {
+        return getQualifier(originalName);
     }
 
     @Override

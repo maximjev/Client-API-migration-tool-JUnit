@@ -36,7 +36,7 @@ public class MigrationPackageImpl implements MigrationPackage {
     }
 
     @Override
-    public List<MigrationMethodUnit> getStaticImports() {
+    public List<MigrationMethodUnit> getStaticMethodImports() {
         return methods;
     }
 }

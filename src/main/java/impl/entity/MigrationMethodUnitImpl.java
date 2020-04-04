@@ -3,18 +3,18 @@ package impl.entity;
 import api.entity.MigrationMethodUnit;
 
 public class MigrationMethodUnitImpl extends MigrationClassUnitImpl implements MigrationMethodUnit {
-    private String oldMethod;
+    private String originalMethod;
     private String newMethod;
 
-    public MigrationMethodUnitImpl(String oldName, String newName, String oldMethod, String newMethod) {
-        super(oldName, newName);
-        this.oldMethod = oldMethod;
+    public MigrationMethodUnitImpl(String originalName, String newName, String originalMethod, String newMethod) {
+        super(originalName, newName);
+        this.originalMethod = originalMethod;
         this.newMethod = newMethod;
     }
 
     @Override
-    public String getOldMethod() {
-        return oldMethod;
+    public String getOriginalMethod() {
+        return originalMethod;
     }
 
     @Override
@@ -23,8 +23,8 @@ public class MigrationMethodUnitImpl extends MigrationClassUnitImpl implements M
     }
 
     @Override
-    public String getOldFullName() {
-        return getFullName(getOldName(), getOldMethod());
+    public String getOriginalFullName() {
+        return getFullName(getOriginalName(), getOriginalMethod());
     }
 
     @Override
