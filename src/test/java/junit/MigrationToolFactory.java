@@ -1,47 +1,31 @@
 package junit;
 
-import api.entity.MigrationClassUnit;
-import api.entity.MigrationMethodUnit;
-import impl.entity.MigrationClassUnitImpl;
-import impl.entity.MigrationMethodUnitImpl;
+import api.entity.MigrationUnit;
+import impl.entity.MigrationAnnotationUnit;
+import impl.entity.MigrationMethodUnit;
 import impl.MigrationPackageImpl;
 import api.service.MigrationTool;
-import org.junit.jupiter.api.Assumptions;
 
 import java.util.Arrays;
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
+
+
 public class MigrationToolFactory {
 
     public static MigrationTool getInstance() {
-        List<MigrationClassUnit> annotations = Arrays.asList(
-                new MigrationClassUnitImpl("org.junit.Before", "org.junit.jupiter.api.BeforeEach"),
-                new MigrationClassUnitImpl("org.junit.After", "org.junit.jupiter.api.AfterEach"),
-                new MigrationClassUnitImpl("org.junit.BeforeClass", "org.junit.jupiter.api.BeforeAll"),
-                new MigrationClassUnitImpl("org.junit.AfterClass", "org.junit.jupiter.api.AfterAll"),
-                new MigrationClassUnitImpl("org.junit.Ignore", "org.junit.jupiter.api.Disabled")
+        List<MigrationUnit> annotations = Arrays.asList(
+                new MigrationAnnotationUnit("org.junit.Before", "org.junit.jupiter.api.BeforeEach"),
+                new MigrationAnnotationUnit("org.junit.After", "org.junit.jupiter.api.AfterEach"),
+                new MigrationAnnotationUnit("org.junit.BeforeClass", "org.junit.jupiter.api.BeforeAll"),
+                new MigrationAnnotationUnit("org.junit.AfterClass", "org.junit.jupiter.api.AfterAll"),
+                new MigrationAnnotationUnit("org.junit.Ignore", "org.junit.jupiter.api.Disabled"),
+                new MigrationMethodUnit("org.junit.Assert.assertEquals", "org.junit.jupiter.api.Assertions.assertEquals"),
+                new MigrationMethodUnit("org.junit.Assert.assertAll", "org.junit.jupiter.api.Assertions.assertAll"),
+                new MigrationMethodUnit("org.junit.Assume.assumeTrue", "org.junit.jupiter.api.Assumptions.assumeTrue")
         );
 
-        List<MigrationMethodUnit> methods = Arrays.asList(
-                new MigrationMethodUnitImpl(
-                        "org.junit.Assert",
-                        "org.junit.jupiter.api.Assertions",
-                        "assertEquals",
-                        "assertEquals"),
-                new MigrationMethodUnitImpl(
-                        "org.junit.Assert",
-                        "org.junit.jupiter.api.Assertions",
-                        "assertAll",
-                        "assertAll"),
-                new MigrationMethodUnitImpl(
-                        "org.junit.Assume",
-                        "org.junit.jupiter.api.Assumptions",
-                        "assumeTrue",
-                        "assumeTrue")
-        );
-
-
-
-        return new JUnitMigrationTool(new MigrationPackageImpl(annotations, methods));
+        return new JUnitMigrationTool(new MigrationPackageImpl(annotations));
     }
 }

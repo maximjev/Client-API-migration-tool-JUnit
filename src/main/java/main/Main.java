@@ -1,8 +1,9 @@
 package main;
 
-import api.entity.MigrationClassUnit;
+import api.entity.MigrationUnit;
 import exception.FileProcessingException;
-import impl.entity.MigrationClassUnitImpl;
+import impl.entity.MigrationAnnotationUnit;
+import impl.entity.MigrationUnitImpl;
 import impl.MigrationPackageImpl;
 import processor.FileProcessor;
 import junit.JUnitMigrationTool;
@@ -16,12 +17,12 @@ public class Main {
             throw new FileProcessingException("No path provided");
         }
 
-        List<MigrationClassUnit> nodes = Arrays.asList(
-                new MigrationClassUnitImpl("org.junit.Before", "org.junit.jupiter.api.BeforeEach"),
-                new MigrationClassUnitImpl("org.junit.After", "org.junit.jupiter.api.AfterEach")
+        List<MigrationUnit> nodes = Arrays.asList(
+                new MigrationAnnotationUnit("org.junit.Before", "org.junit.jupiter.api.BeforeEach"),
+                new MigrationAnnotationUnit("org.junit.After", "org.junit.jupiter.api.AfterEach")
         );
 
-        MigrationPackageImpl migrationPackage = new MigrationPackageImpl(nodes, new ArrayList<>());
+        MigrationPackageImpl migrationPackage = new MigrationPackageImpl(nodes);
 
         new FileProcessor(new JUnitMigrationTool(migrationPackage)).process(args[0]);
     }

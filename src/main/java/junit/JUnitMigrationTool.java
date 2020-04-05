@@ -8,11 +8,9 @@ import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinte
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
-import service.AnnotationMigrationService;
+import service.*;
 import api.service.MigrationPackage;
 import api.service.MigrationTool;
-import service.ImportMigrationService;
-import service.MethodMigrationService;
 
 
 import java.util.Arrays;

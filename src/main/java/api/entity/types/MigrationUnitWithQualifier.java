@@ -3,7 +3,10 @@ package api.entity.types;
 
 import api.entity.MigrationUnit;
 
+import java.util.Optional;
+
 public interface MigrationUnitWithQualifier extends MigrationUnit {
-    String getOriginalQualifier();
-    String getNewQualifier();
+    Optional<MigrationUnitName> getOriginalQualifier();
+
+    Optional<MigrationUnitName> getNewQualifier();
 }

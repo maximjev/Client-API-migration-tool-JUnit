@@ -1,53 +1,68 @@
 package service;
 
-import api.entity.MigrationClassUnit;
-import api.entity.MigrationMethodUnit;
-import api.service.MigrationChangeSet;
-import api.service.MigrationPackage;
+import api.entity.MigrationUnitType;
 import api.service.MigrationService;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
-import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.nodeTypes.NodeWithName;
-import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
-import impl.MigrationChangeSetImpl;
-import impl.matcher.MigrationUnitMatcher;
+import impl.entity.MigrationMethodUnit;
+import impl.entity.MigrationUnitImpl;
 
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public class ImportMigrationService implements MigrationService {
+import static api.entity.MigrationUnitType.*;
 
-    private List<MigrationClassUnit> importUnits = Collections.emptyList();
-    private List<MigrationMethodUnit> staticUnits = Collections.emptyList();
+public class ImportMigrationService extends MigrationService<MigrationUnitImpl, ImportDeclaration> {
 
-    private MigrationUnitMatcher<NodeWithName, MigrationClassUnit, NodeWithSimpleName, MigrationMethodUnit> matcher = new MigrationUnitMatcher<>();
-
-    @Override
-    public MigrationService setup(MigrationPackage mu) {
-        staticUnits = mu.getStaticMethodImports();
-        importUnits = mu.getImports();
-        return this;
+    protected boolean supports(MigrationUnitType unitType) {
+        return MARKER_ANNOTATION.equals(unitType) ||
+                METHOD_CALL.equals(unitType);
     }
 
     @Override
-    public MigrationChangeSet migrate(CompilationUnit cu) {
-        Map<Node, Node> changeSet = new HashMap<>();
+    protected boolean filterPredicate(CompilationUnit cu, ImportDeclaration node, List<MigrationUnitImpl> units) {
+        return matcher.anyMatch(node.getName(), units, "NQ");
+    }
 
-        cu.findAll(ImportDeclaration.class, n -> matcher.matchesName(n, importUnits))
-                .forEach(n -> matcher.findByName(n, importUnits)
-                        .ifPresent(u -> changeSet.put(n, new ImportDeclaration(u.getNewName(), n.isStatic(), n.isAsterisk()))));
+    @Override
+    protected ImportDeclaration process(ImportDeclaration node) {
+        MigrationUnitImpl unit = matcher.find(node.getName(), units, "NQ");
+        if (unit.getClass().isAssignableFrom(MigrationMethodUnit.class)) {
+            return processMethodImport(node, unit);
+        } else {
+            return processClassImport(node, unit);
+        }
+    }
 
-        cu.findAll(ImportDeclaration.class, n -> matcher.matchesQualifier(n, importUnits) && n.isAsterisk())
-                .forEach(n -> matcher.findByQualifier(n, importUnits)
-                        .ifPresent(u -> changeSet.put(n, new ImportDeclaration(u.getNewQualifier(), n.isStatic(), true))));
+    private ImportDeclaration processMethodImport(ImportDeclaration node, MigrationUnitImpl unit) {
+        if (node.isStatic()) {
+            if (node.isAsterisk()) {
+                return createImport(unit.getNewQualifier().get().getName(), node.isStatic(), node.isAsterisk());
+            } else {
+                return createImport(unit.getNewName().getName(), node.isStatic(), node.isAsterisk());
+            }
+        } else {
+            if (node.isAsterisk()) {
+                return createImport(unit.getNewQualifier().get().getQualifier().get().getName(), node.isStatic(), node.isAsterisk());
+            } else {
+                return createImport(unit.getNewQualifier().get().getName(), node.isStatic(), node.isAsterisk());
+            }
+        }
+    }
 
-        cu.findAll(ImportDeclaration.class, n -> matcher.matchesStaticMethod(n, staticUnits) && n.isStatic())
-                .forEach(n -> matcher.findByStaticMethod(n, staticUnits)
-                        .ifPresent(u -> changeSet.put(n, new ImportDeclaration(u.getNewFullName(), true, n.isAsterisk()))));
+    private ImportDeclaration processClassImport(ImportDeclaration node, MigrationUnitImpl unit) {
+        if (node.isAsterisk()) {
+            return createImport(unit.getNewQualifier().get().getName(), node.isStatic(), node.isAsterisk());
+        } else {
+            return createImport(unit.getNewName().getName(), node.isStatic(), node.isAsterisk());
+        }
+    }
 
-        return new MigrationChangeSetImpl(changeSet);
+    private ImportDeclaration createImport(String name, boolean isStatic, boolean isAsterisk) {
+        return new ImportDeclaration(name, isStatic, isAsterisk);
+    }
+
+    @Override
+    protected Class<ImportDeclaration> getType() {
+        return ImportDeclaration.class;
     }
 }

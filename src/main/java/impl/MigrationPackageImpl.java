@@ -1,42 +1,21 @@
 package impl;
 
-import api.entity.MigrationClassUnit;
-import api.entity.MigrationMethodUnit;
-import api.entity.types.MigrationUnitWithClass;
+import api.entity.MigrationUnit;
 import api.service.MigrationPackage;
 
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class MigrationPackageImpl implements MigrationPackage {
 
-    private List<MigrationClassUnit> annotations;
-    private List<MigrationMethodUnit> methods;
+    private List<MigrationUnit> units;
 
-    public MigrationPackageImpl(List<MigrationClassUnit> annotations, List<MigrationMethodUnit> methods) {
-        this.annotations = annotations;
-        this.methods = methods;
+    public MigrationPackageImpl(List<MigrationUnit> units) {
+        this.units = units;
     }
 
     @Override
-    public List<MigrationClassUnit> getAnnotations() {
-        return annotations;
+    public List<MigrationUnit> getUnits() {
+        return units;
     }
 
-    @Override
-    public List<MigrationMethodUnit> getMethods() {
-        return methods;
-    }
-
-    @Override
-    public List<MigrationClassUnit> getImports() {
-        return Stream.concat(annotations.stream(), methods.stream())
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<MigrationMethodUnit> getStaticMethodImports() {
-        return methods;
-    }
 }
