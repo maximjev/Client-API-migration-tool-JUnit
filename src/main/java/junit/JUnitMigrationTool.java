@@ -46,21 +46,13 @@ public class JUnitMigrationTool implements MigrationTool {
     }
 
     private CompilationUnit process(CompilationUnit cu) {
-        getMigrationServices()
+        return getMigrationServices()
                 .stream()
                 .map(m -> m.setup(migrationPackage))
                 .map(m -> m.migrate(cu))
                 .reduce((cs, o) -> o.merge(cs))
-                .ifPresent(cs -> applyChangeSet(cs, cu));
-
-        return cu;
-    }
-
-    private void applyChangeSet(MigrationChangeSet changeSet, CompilationUnit cu) {
-        changeSet.getChangeSet().forEach((o, n) -> {
-            o.replace(n);
-            cu.replace(o, n);
-        });
+                .map(cs -> applyChangeSet(cs, cu))
+                .orElse(cu);
     }
 
     private List<MigrationService> getMigrationServices() {
@@ -69,5 +61,13 @@ public class JUnitMigrationTool implements MigrationTool {
                 new ImportMigrationService(),
                 new MethodMigrationService()
         );
+    }
+
+    private CompilationUnit applyChangeSet(MigrationChangeSet changeSet, CompilationUnit cu) {
+        changeSet.getChangeSet().forEach((o, n) -> {
+            o.replace(n);
+            cu.replace(o, n);
+        });
+        return cu;
     }
 }

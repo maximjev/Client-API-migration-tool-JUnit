@@ -2,7 +2,7 @@ package api.entity;
 
 public interface MigrationArgumentUnit {
 
-    Integer getOriginalPosition();
+    int getOriginalPosition();
 
-    Integer getNewPosition();
+    int getNewPosition();
 }

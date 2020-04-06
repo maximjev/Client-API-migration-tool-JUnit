@@ -27,7 +27,8 @@ public class MethodSnapshotTestProcessor {
             "AssertEqualsStaticAsterisk",
             "AssumeTrue",
             "AssumeTrueStatic",
-            "AssumeTrueStaticAsterisk"
+            "AssumeTrueStaticAsterisk",
+            "AssertEqualsText"
     })
     void process(String testcaseName) throws Exception {
         Path testCase = Paths.get(TEST_CASE_DIRECTORY, testcaseName + JAVA);
