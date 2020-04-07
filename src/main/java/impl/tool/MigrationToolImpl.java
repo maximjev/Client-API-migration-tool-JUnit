@@ -1,14 +1,14 @@
-package junit;
+package impl.tool;
 
 import api.service.MigrationChangeSet;
-import api.service.MigrationService;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
-import service.*;
+import impl.api.MigrationService;
+import impl.service.*;
 import api.service.MigrationPackage;
 import api.service.MigrationTool;
 
@@ -20,10 +20,10 @@ import java.util.Objects;
 import static java.util.stream.Collectors.*;
 import static java.util.stream.Stream.of;
 
-public class JUnitMigrationTool implements MigrationTool {
+public class MigrationToolImpl implements MigrationTool {
     private MigrationPackage migrationPackage;
 
-    public JUnitMigrationTool(MigrationPackage migrationPackage) {
+    public MigrationToolImpl(MigrationPackage migrationPackage) {
         this.migrationPackage = migrationPackage;
     }
 

@@ -3,10 +3,9 @@ package main;
 import api.entity.MigrationUnit;
 import exception.FileProcessingException;
 import impl.entity.MigrationAnnotationUnit;
-import impl.entity.MigrationUnitImpl;
 import impl.MigrationPackageImpl;
+import impl.tool.MigrationToolImpl;
 import processor.FileProcessor;
-import junit.JUnitMigrationTool;
 
 import java.util.*;
 
@@ -24,6 +23,6 @@ public class Main {
 
         MigrationPackageImpl migrationPackage = new MigrationPackageImpl(nodes);
 
-        new FileProcessor(new JUnitMigrationTool(migrationPackage)).process(args[0]);
+        new FileProcessor(new MigrationToolImpl(migrationPackage)).process(args[0]);
     }
 }

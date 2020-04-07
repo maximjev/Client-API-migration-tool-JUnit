@@ -7,6 +7,7 @@ import impl.entity.MigrationMethodArgumentUnit;
 import impl.entity.MigrationMethodUnit;
 import impl.MigrationPackageImpl;
 import api.service.MigrationTool;
+import impl.tool.MigrationToolImpl;
 
 import java.util.Arrays;
 import java.util.List;
@@ -33,6 +34,6 @@ public class MigrationToolFactory {
                 new MigrationMethodUnit("org.junit.Assume.assumeTrue", "org.junit.jupiter.api.Assumptions.assumeTrue", arguments)
         );
 
-        return new JUnitMigrationTool(new MigrationPackageImpl(migrationUnits));
+        return new MigrationToolImpl(new MigrationPackageImpl(migrationUnits));
     }
 }

@@ -1,6 +1,7 @@
-package impl.entity;
+package impl.type;
 
-import api.entity.types.MigrationUnitName;
+
+import api.entity.MigrationUnitName;
 
 import java.util.Optional;
 

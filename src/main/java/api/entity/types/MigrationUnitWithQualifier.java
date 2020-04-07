@@ -2,6 +2,7 @@ package api.entity.types;
 
 
 import api.entity.MigrationUnit;
+import api.entity.MigrationUnitName;
 
 import java.util.Optional;
 

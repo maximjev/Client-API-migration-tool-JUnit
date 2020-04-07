@@ -1,6 +1,7 @@
 package impl.entity;
 
 import api.entity.MigrationUnitType;
+import impl.type.MigrationUnitImpl;
 
 public class MigrationAnnotationUnit extends MigrationUnitImpl {
     public MigrationAnnotationUnit(String originalName, String newName) {
@@ -11,4 +12,6 @@ public class MigrationAnnotationUnit extends MigrationUnitImpl {
     public MigrationUnitType getType() {
         return MigrationUnitType.MARKER_ANNOTATION;
     }
+
 }
+

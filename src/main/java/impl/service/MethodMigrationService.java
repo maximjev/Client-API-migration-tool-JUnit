@@ -1,16 +1,16 @@
-package service;
+package impl.service;
 
 import api.entity.MigrationArgumentUnit;
 import api.entity.MigrationUnitType;
-import api.service.MigrationService;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.NameExpr;
+import impl.api.MigrationService;
 import impl.entity.MigrationMethodUnit;
-import javassist.expr.Expr;
+import impl.tool.MigrationService;
 
 import java.util.Comparator;
 import java.util.List;
@@ -25,7 +25,7 @@ public class MethodMigrationService extends MigrationService<MigrationMethodUnit
     }
 
     @Override
-    protected boolean filterPredicate(CompilationUnit cu, MethodCallExpr node, List<MigrationMethodUnit> units) {
+    protected boolean filterPredicate(CompilationUnit cu, MethodCallExpr node) {
         return matcher.anyMatch(node.getName(), units, "I") && hasImport(cu, units);
     }
 
@@ -67,14 +67,11 @@ public class MethodMigrationService extends MigrationService<MigrationMethodUnit
                 .map(MigrationArgumentUnit::getNewPosition)
                 .reduce(0, Integer::sum);
 
-        if (originalArgSum != newArgSum) {
-            return false;
-        }
-        return true;
+        return originalArgSum == newArgSum;
     }
 
     @Override
-    protected Class<MethodCallExpr> getType() {
+    protected Class<MethodCallExpr> getClassType() {
         return MethodCallExpr.class;
     }
 

@@ -1,4 +1,4 @@
-package api.entity.types;
+package api.entity;
 
 import java.util.Optional;
 

@@ -1,10 +1,10 @@
-package service;
+package impl.service;
 
 import api.entity.MigrationUnitType;
-import api.service.MigrationService;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
+import impl.api.MigrationService;
 import impl.entity.MigrationAnnotationUnit;
 
 import java.util.List;
@@ -17,7 +17,7 @@ public class AnnotationMigrationService extends MigrationService<MigrationAnnota
     }
 
     @Override
-    protected boolean filterPredicate(CompilationUnit cu, MarkerAnnotationExpr node, List<MigrationAnnotationUnit> units) {
+    protected boolean filterPredicate(CompilationUnit cu, MarkerAnnotationExpr node) {
         return matcher.anyMatch(node.getName(), units, "I") && hasImport(cu, units);
     }
 
@@ -26,7 +26,7 @@ public class AnnotationMigrationService extends MigrationService<MigrationAnnota
         return new MarkerAnnotationExpr(unit.getNewIdentifier());
     }
 
-    protected Class<MarkerAnnotationExpr> getType() {
+    protected Class<MarkerAnnotationExpr> getClassType() {
         return MarkerAnnotationExpr.class;
     }
 

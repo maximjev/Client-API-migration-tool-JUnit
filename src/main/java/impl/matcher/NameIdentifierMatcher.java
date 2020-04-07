@@ -2,6 +2,7 @@ package impl.matcher;
 
 import api.entity.types.MigrationUnitWithIdentifier;
 import com.github.javaparser.ast.expr.Name;
+import impl.api.MigrationMatcher;
 
 public class NameIdentifierMatcher extends MigrationMatcher<MigrationUnitWithIdentifier, Name> {
     protected boolean match(Name node, MigrationUnitWithIdentifier unit) {

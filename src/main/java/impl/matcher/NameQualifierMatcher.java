@@ -2,7 +2,7 @@ package impl.matcher;
 
 import api.entity.types.MigrationUnitWithQualifier;
 import com.github.javaparser.ast.expr.Name;
-import com.github.javaparser.ast.nodeTypes.NodeWithName;
+import impl.api.MigrationMatcher;
 
 
 public class NameQualifierMatcher extends MigrationMatcher<MigrationUnitWithQualifier, Name> {

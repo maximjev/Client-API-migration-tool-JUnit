@@ -1,13 +1,12 @@
-package service;
+package impl.service;
 
 import api.entity.MigrationUnitType;
-import api.service.MigrationService;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
+import impl.api.MigrationService;
 import impl.entity.MigrationMethodUnit;
-import impl.entity.MigrationUnitImpl;
-
-import java.util.List;
+import impl.tool.MigrationService;
+import impl.type.MigrationUnitImpl;
 
 import static api.entity.MigrationUnitType.*;
 
@@ -19,7 +18,7 @@ public class ImportMigrationService extends MigrationService<MigrationUnitImpl, 
     }
 
     @Override
-    protected boolean filterPredicate(CompilationUnit cu, ImportDeclaration node, List<MigrationUnitImpl> units) {
+    protected boolean filterPredicate(CompilationUnit cu, ImportDeclaration node) {
         return matcher.anyMatch(node.getName(), units, "NQ");
     }
 
@@ -62,7 +61,7 @@ public class ImportMigrationService extends MigrationService<MigrationUnitImpl, 
     }
 
     @Override
-    protected Class<ImportDeclaration> getType() {
+    protected Class<ImportDeclaration> getClassType() {
         return ImportDeclaration.class;
     }
 }

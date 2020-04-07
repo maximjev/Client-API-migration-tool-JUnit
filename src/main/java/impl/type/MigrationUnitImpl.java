@@ -1,6 +1,6 @@
-package impl.entity;
+package impl.type;
 
-import api.entity.types.MigrationUnitName;
+import api.entity.MigrationUnitName;
 import api.entity.types.MigrationUnitWithFullName;
 import api.entity.types.MigrationUnitWithIdentifier;
 import api.entity.types.MigrationUnitWithQualifier;

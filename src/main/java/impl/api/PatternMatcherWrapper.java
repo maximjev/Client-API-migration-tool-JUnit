@@ -1,10 +1,10 @@
-package impl.matcher;
+package impl.api;
 
-import impl.entity.MigrationUnitImpl;
+import impl.matcher.*;
+import impl.type.MigrationUnitImpl;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import static java.util.stream.Collectors.*;
 

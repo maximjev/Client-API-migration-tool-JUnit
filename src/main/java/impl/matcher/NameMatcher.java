@@ -2,6 +2,7 @@ package impl.matcher;
 
 import api.entity.types.MigrationUnitWithFullName;
 import com.github.javaparser.ast.expr.Name;
+import impl.api.MigrationMatcher;
 import impl.entity.MigrationMethodUnit;
 
 public class NameMatcher extends MigrationMatcher<MigrationUnitWithFullName, Name> {
