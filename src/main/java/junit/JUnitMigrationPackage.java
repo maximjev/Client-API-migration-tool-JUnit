@@ -3,14 +3,12 @@ package junit;
 import api.entity.MigrationUnit;
 import api.entity.MigrationUnitArg;
 import api.service.MigrationPackage;
-import api.service.MigrationTool;
 import com.google.common.collect.Streams;
 import impl.changeset.MigrationPackageImpl;
 import impl.entity.CustomMigrationUnit;
 import impl.entity.MarkerAnnotationUnit;
 import impl.entity.MethodCallArgUnit;
 import impl.entity.MethodCallUnit;
-import impl.tool.MigrationToolImpl;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -48,8 +46,8 @@ public class JUnitMigrationPackage {
         Map<String, String> params = new HashMap<>();
         params.put("annotation", "Test");
         params.put("keyParam", "expected");
-        params.put("oldImport", "org.junit.jupiter.api.Assertions");
-        params.put("newImport", "org.junit.Assert");
+        params.put("newImport", "org.junit.jupiter.api.Assertions");
+        params.put("oldImport", "org.junit.Assert");
         params.put("scope", "Assertions");
         params.put("method", "assertThrows");
 
@@ -72,8 +70,6 @@ public class JUnitMigrationPackage {
                 new MarkerAnnotationUnit("org.junit.Ignore", "org.junit.jupiter.api.Disabled"),
                 new MarkerAnnotationUnit("org.junit.Test", "org.junit.jupiter.api.Test")
         );
-
-
 
         List<MigrationUnit> combined = Streams.concat(
                 assertions.stream(),

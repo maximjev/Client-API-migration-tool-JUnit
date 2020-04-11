@@ -1,6 +1,7 @@
 package impl.service;
 
 import api.entity.MigrationUnitType;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.NodeList;
@@ -79,7 +80,7 @@ public class CustomMigrationService extends MigrationService<CustomMigrationUnit
 
     private BlockStmt constructNewBody(BlockStmt blockStmt, Expression exception, Map<String, String> params) {
         LambdaExpr lambda = new LambdaExpr()
-                .setBody(blockStmt.clone())
+                .setBody(new BlockStmt(blockStmt.getStatements()))
                 .setEnclosingParameters(true);
 
         MethodCallExpr method = new MethodCallExpr(new NameExpr(params.get("scope")), params.get("method"))
@@ -89,12 +90,17 @@ public class CustomMigrationService extends MigrationService<CustomMigrationUnit
         NodeList<Statement> methodStatements = new NodeList<>();
         methodStatements.add(new ExpressionStmt(method));
 
-        return formatBlock(new BlockStmt(methodStatements));
+        return new BlockStmt(methodStatements);
     }
 
     private boolean hasImport(CompilationUnit cu, Map<String, String> params) {
-        return !(cu.findAll(ImportDeclaration.class, n -> matcher.anyPatternMatch(n.getName(), params.get("oldImport"), "QN")).isEmpty()
-        || cu.findAll(ImportDeclaration.class, n -> matcher.anyPatternMatch(n.getName(), params.get("newImport"), "QN")).isEmpty());
+        return hasImport(cu, params.get("oldImport"));
+    }
+
+    private boolean hasImport(CompilationUnit cu, String importParam) {
+        return cu.findAll(ImportDeclaration.class,
+                n -> matcher.anyPatternMatch(n.getName(), importParam, "QN")
+                        && ((n.isStatic() && n.isAsterisk()) || !n.isStatic())).size() > 0;
     }
 
     @Override

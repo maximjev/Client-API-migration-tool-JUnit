@@ -54,9 +54,9 @@ public class MigrationToolImpl implements MigrationTool {
 
     private List<MigrationService> getMigrationServices() {
         return Arrays.asList(
-                new CustomMigrationService(),
                 new MarkerAnnotationMigrationService(),
                 new MethodCallMigrationService(),
+                new CustomMigrationService(),
                 new ImportDeclarationMigrationService()
         );
     }

@@ -16,18 +16,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class MigrationSnapshotTest {
 
     private static final String JAVA = ".java";
-
-    private static final String ASSERTIONS_EXPECTED_DIR = "snapshots/assertions/expected";
-    private static final String ASSERTIONS_ACTUAL_DIR = "snapshots/assertions/actual";
-
-    private static final String ASSUMPTIONS_EXPECTED_DIR = "snapshots/assumptions/expected";
-    private static final String ASSUMPTIONS_ACTUAL_DIR = "snapshots/assumptions/actual";
-
-    private static final String ANNOTATIONS_EXPECTED_DIR = "snapshots/annotations/expected";
-    private static final String ANNOTATIONS_ACTUAL_DIR = "snapshots/annotations/actual";
-
-    private static final String CUSTOM_EXPECTED_DIR = "snapshots/custom/expected";
-    private static final String CUSTOM_ACTUAL_DIR = "snapshots/custom/actual";
+    private static final String EXPECTED_DIRECTORY = "snapshots/%s/expected";
+    private static final String ACTUAL_DIRECTORY = "snapshots/%s/actual";
 
     private MigrationTool tool = new MigrationToolImpl(JUnitMigrationPackage.getInstance());
 
@@ -39,8 +29,9 @@ public class MigrationSnapshotTest {
             "AssertEqualsText"
     })
     void assertions(String testcaseName) throws Exception {
-        Path actual = Paths.get(ASSERTIONS_ACTUAL_DIR, testcaseName + JAVA);
-        Path expected = Paths.get(ASSERTIONS_EXPECTED_DIR, testcaseName + JAVA);
+        String testScope = "assertions";
+        Path actual = Paths.get(String.format(ACTUAL_DIRECTORY, testScope), testcaseName + JAVA);
+        Path expected = Paths.get(String.format(EXPECTED_DIRECTORY, testScope), testcaseName + JAVA);
         assertEquals(Files.readString(expected), tool.migrate(Files.readString(actual)));
     }
 
@@ -51,8 +42,9 @@ public class MigrationSnapshotTest {
             "AssumeTrueStaticAsterisk"
     })
     void assumptions(String testcaseName) throws Exception {
-        Path actual = Paths.get(ASSUMPTIONS_ACTUAL_DIR, testcaseName + JAVA);
-        Path expected = Paths.get(ASSUMPTIONS_EXPECTED_DIR, testcaseName + JAVA);
+        String testScope = "assumptions";
+        Path actual = Paths.get(String.format(ACTUAL_DIRECTORY, testScope), testcaseName + JAVA);
+        Path expected = Paths.get(String.format(EXPECTED_DIRECTORY, testScope), testcaseName + JAVA);
         assertEquals(Files.readString(expected), tool.migrate(Files.readString(actual)));
     }
 
@@ -71,19 +63,23 @@ public class MigrationSnapshotTest {
             "BeforeAndAfterEachAsterisk"
     })
     void annotations(String testcaseName) throws Exception {
-        Path actual = Paths.get(ANNOTATIONS_ACTUAL_DIR, testcaseName + JAVA);
-        Path expected = Paths.get(ANNOTATIONS_EXPECTED_DIR, testcaseName + JAVA);
+        String testScope = "annotations";
+        Path actual = Paths.get(String.format(ACTUAL_DIRECTORY, testScope), testcaseName + JAVA);
+        Path expected = Paths.get(String.format(EXPECTED_DIRECTORY, testScope), testcaseName + JAVA);
         assertEquals(Files.readString(expected), tool.migrate(Files.readString(actual)));
     }
 
     @ParameterizedTest(name = "{0} test")
     @ValueSource(strings = {
             "AssertThrows",
-            "AssertThrowsWithImport"
+            "AssertThrowsWithImport",
+            "AssertThrowsWithAsteriskImport",
+            "AssertThrowsWithStaticImport"
     })
     void custom(String testcaseName) throws Exception {
-        Path actual = Paths.get(CUSTOM_ACTUAL_DIR, testcaseName + JAVA);
-        Path expected = Paths.get(CUSTOM_EXPECTED_DIR, testcaseName + JAVA);
+        String testScope = "custom";
+        Path actual = Paths.get(String.format(ACTUAL_DIRECTORY, testScope), testcaseName + JAVA);
+        Path expected = Paths.get(String.format(EXPECTED_DIRECTORY, testScope), testcaseName + JAVA);
         assertEquals(Files.readString(expected), tool.migrate(Files.readString(actual)));
     }
 }
