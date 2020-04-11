@@ -1,4 +1,4 @@
-package impl;
+package impl.changeset;
 
 import api.entity.MigrationUnit;
 import api.service.MigrationPackage;

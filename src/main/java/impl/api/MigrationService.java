@@ -2,16 +2,15 @@ package impl.api;
 
 import api.entity.MigrationUnit;
 import api.entity.MigrationUnitType;
-import api.service.MigrationChangeSet;
 import api.service.MigrationPackage;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
-import impl.MigrationChangeSetImpl;
+import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.printer.ConcreteSyntaxModel;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static java.util.stream.Collectors.toList;
 
@@ -22,29 +21,29 @@ public abstract class MigrationService<U extends MigrationUnit, N extends Node> 
     protected PatternMatcherWrapper matcher = new PatternMatcherWrapper();
 
     @SuppressWarnings("unchecked")
-    public MigrationService setup(MigrationPackage mu) {
+    public boolean supports(MigrationPackage mu) {
         this.units = mu.getUnits()
                 .stream()
                 .filter(u -> supports(u.getType()))
                 .map(a -> (U) a)
                 .collect(toList());
-        return this;
+        return units.size() > 0;
     }
 
-    public MigrationChangeSet migrate(CompilationUnit cu) {
-        Map<Node, Node> changeSet = new HashMap<>();
-
+    public void migrate(CompilationUnit cu) {
         cu.findAll(getClassType(), n -> filterPredicate(cu, n))
-                .forEach(n -> changeSet.put(n, process(n)));
+                .forEach(n -> process(cu, n));
+    }
 
-        return new MigrationChangeSetImpl(changeSet);
+    protected BlockStmt formatBlock(BlockStmt blockStmt) {
+        return StaticJavaParser.parseBlock(ConcreteSyntaxModel.genericPrettyPrint(blockStmt));
     }
 
     protected abstract boolean supports(MigrationUnitType unitType);
 
     protected abstract boolean filterPredicate(CompilationUnit cu, N node);
 
-    protected abstract N process(N node);
+    protected abstract void process(CompilationUnit cu, N node);
 
     protected abstract Class<N> getClassType();
 }

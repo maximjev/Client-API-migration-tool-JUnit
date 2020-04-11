@@ -1,6 +1,5 @@
 package impl.tool;
 
-import api.service.MigrationChangeSet;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
@@ -46,28 +45,19 @@ public class MigrationToolImpl implements MigrationTool {
     }
 
     private CompilationUnit process(CompilationUnit cu) {
-        return getMigrationServices()
+        getMigrationServices()
                 .stream()
-                .map(m -> m.setup(migrationPackage))
-                .map(m -> m.migrate(cu))
-                .reduce((cs, o) -> o.merge(cs))
-                .map(cs -> applyChangeSet(cs, cu))
-                .orElse(cu);
+                .filter(m -> m.supports(migrationPackage))
+                .forEach(m -> m.migrate(cu));
+        return cu;
     }
 
     private List<MigrationService> getMigrationServices() {
         return Arrays.asList(
-                new AnnotationMigrationService(),
-                new ImportMigrationService(),
-                new MethodMigrationService()
+                new CustomMigrationService(),
+                new MarkerAnnotationMigrationService(),
+                new MethodCallMigrationService(),
+                new ImportDeclarationMigrationService()
         );
-    }
-
-    private CompilationUnit applyChangeSet(MigrationChangeSet changeSet, CompilationUnit cu) {
-        changeSet.getChangeSet().forEach((o, n) -> {
-            o.replace(n);
-            cu.replace(o, n);
-        });
-        return cu;
     }
 }

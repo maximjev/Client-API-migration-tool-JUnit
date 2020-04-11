@@ -10,7 +10,12 @@ public class SimpleNameIdentifierMatcher extends MigrationMatcher<MigrationUnitW
     }
 
     @Override
-    protected String getPattern() {
+    public boolean matches(SimpleName node, String pattern) {
+        return node.getIdentifier().equals(pattern);
+    }
+
+    @Override
+    protected String matcherId() {
         return "I";
     }
 

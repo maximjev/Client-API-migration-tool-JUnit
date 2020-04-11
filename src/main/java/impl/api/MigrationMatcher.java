@@ -22,15 +22,17 @@ public abstract class MigrationMatcher<U extends MigrationUnit, N> {
                 .orElse(null);
     }
 
-    protected abstract boolean match(N node, U unit);
-
-    public boolean supports(N node, String pattern) {
+    public boolean supports(N node, String matcherId) {
         return getNodeType().isAssignableFrom(node.getClass())
-                && pattern != null
-                && pattern.contains(getPattern());
+                && matcherId != null
+                && matcherId.contains(matcherId());
     }
 
-    protected abstract String getPattern();
+    public abstract boolean matches(N node, String pattern);
+
+    protected abstract boolean match(N node, U unit);
+
+    protected abstract String matcherId();
 
     protected abstract Class<N> getNodeType();
 }

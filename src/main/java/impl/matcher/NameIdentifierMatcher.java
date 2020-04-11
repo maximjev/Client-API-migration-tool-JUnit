@@ -10,7 +10,12 @@ public class NameIdentifierMatcher extends MigrationMatcher<MigrationUnitWithIde
     }
 
     @Override
-    protected String getPattern() {
+    public boolean matches(Name node, String pattern) {
+        return node.getIdentifier().equals(pattern);
+    }
+
+    @Override
+    protected String matcherId() {
         return "I";
     }
 

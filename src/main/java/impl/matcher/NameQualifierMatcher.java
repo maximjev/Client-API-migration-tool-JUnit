@@ -13,7 +13,13 @@ public class NameQualifierMatcher extends MigrationMatcher<MigrationUnitWithQual
     }
 
     @Override
-    protected String getPattern() {
+    public boolean matches(Name node, String pattern) {
+        return node.getQualifier().isPresent()
+                && node.getQualifier().get().toString().equals(pattern);
+    }
+
+    @Override
+    protected String matcherId() {
         return "Q";
     }
 

@@ -2,7 +2,7 @@ package main;
 
 import api.entity.MigrationUnit;
 import exception.FileProcessingException;
-import impl.entity.MigrationAnnotationUnit;
+import impl.entity.MarkerAnnotationUnit;
 import impl.MigrationPackageImpl;
 import impl.tool.MigrationToolImpl;
 import processor.FileProcessor;
@@ -17,8 +17,8 @@ public class Main {
         }
 
         List<MigrationUnit> nodes = Arrays.asList(
-                new MigrationAnnotationUnit("org.junit.Before", "org.junit.jupiter.api.BeforeEach"),
-                new MigrationAnnotationUnit("org.junit.After", "org.junit.jupiter.api.AfterEach")
+                new MarkerAnnotationUnit("org.junit.Before", "org.junit.jupiter.api.BeforeEach"),
+                new MarkerAnnotationUnit("org.junit.After", "org.junit.jupiter.api.AfterEach")
         );
 
         MigrationPackageImpl migrationPackage = new MigrationPackageImpl(nodes);
