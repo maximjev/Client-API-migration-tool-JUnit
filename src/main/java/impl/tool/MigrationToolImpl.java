@@ -1,7 +1,7 @@
 package impl.tool;
 
-import api.service.MigrationPackage;
-import api.service.MigrationTool;
+import api.tool.MigrationPackage;
+import api.tool.MigrationTool;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinter;
@@ -9,7 +9,7 @@ import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
-import impl.api.MigrationService;
+import impl.MigrationService;
 import impl.service.CustomMigrationService;
 import impl.service.ImportDeclarationMigrationService;
 import impl.service.MarkerAnnotationMigrationService;

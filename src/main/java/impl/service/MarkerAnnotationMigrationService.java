@@ -4,7 +4,7 @@ import api.entity.MigrationUnitType;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.expr.MarkerAnnotationExpr;
-import impl.api.MigrationService;
+import impl.MigrationService;
 import impl.entity.MarkerAnnotationUnit;
 
 import java.util.List;

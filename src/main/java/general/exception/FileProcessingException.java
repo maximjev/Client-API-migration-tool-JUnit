@@ -1,4 +1,4 @@
-package exception;
+package general.exception;
 
 public class FileProcessingException extends RuntimeException {
 

@@ -1,4 +1,4 @@
-package api.service;
+package api.tool;
 
 import api.entity.MigrationUnit;
 

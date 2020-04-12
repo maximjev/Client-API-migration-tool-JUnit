@@ -1,8 +1,8 @@
 package impl.matcher;
 
-import api.entity.types.MigrationUnitWithQualifier;
+import api.type.MigrationUnitWithQualifier;
 import com.github.javaparser.ast.expr.Name;
-import impl.api.MigrationMatcher;
+import impl.MigrationMatcher;
 
 
 public class NameQualifierMatcher extends MigrationMatcher<MigrationUnitWithQualifier, Name> {

@@ -1,4 +1,4 @@
-package api.entity.types;
+package api.type;
 
 import api.entity.MigrationUnitArg;
 import api.entity.MigrationUnit;

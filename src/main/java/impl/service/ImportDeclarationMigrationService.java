@@ -3,8 +3,7 @@ package impl.service;
 import api.entity.MigrationUnitType;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
-import impl.api.MigrationService;
-import impl.entity.ImportDeclarationUnit;
+import impl.MigrationService;
 import impl.entity.MethodCallUnit;
 import impl.type.MigrationUnitImpl;
 

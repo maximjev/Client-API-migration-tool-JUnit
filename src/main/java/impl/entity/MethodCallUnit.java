@@ -2,7 +2,7 @@ package impl.entity;
 
 import api.entity.MigrationUnitArg;
 import api.entity.MigrationUnitType;
-import api.entity.types.MigrationUnitWithMethod;
+import api.type.MigrationUnitWithMethod;
 import impl.type.MigrationUnitImpl;
 
 import java.util.ArrayList;

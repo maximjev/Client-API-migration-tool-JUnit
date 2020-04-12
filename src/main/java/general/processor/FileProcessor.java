@@ -1,7 +1,7 @@
-package processor;
+package general.processor;
 
-import exception.FileProcessingException;
-import api.service.MigrationTool;
+import general.exception.FileProcessingException;
+import api.tool.MigrationTool;
 
 import java.io.File;
 import java.io.IOException;

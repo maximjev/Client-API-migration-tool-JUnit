@@ -1,8 +1,8 @@
 package impl.matcher;
 
-import api.entity.types.MigrationUnitWithFullName;
+import api.type.MigrationUnitWithFullName;
 import com.github.javaparser.ast.expr.Name;
-import impl.api.MigrationMatcher;
+import impl.MigrationMatcher;
 
 public class NameMatcher extends MigrationMatcher<MigrationUnitWithFullName, Name> {
     protected boolean match(Name node, MigrationUnitWithFullName unit) {

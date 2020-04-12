@@ -1,6 +1,6 @@
 package impl;
 
-import exception.CalculatorException;
+import general.exception.CalculatorException;
 import org.junit.jupiter.api.*;
 
 import java.util.*;

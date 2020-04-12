@@ -1,6 +1,6 @@
 package junit.service;
 
-import api.service.MigrationTool;
+import api.tool.MigrationTool;
 import impl.tool.MigrationToolImpl;
 import junit.JUnitMigrationPackage;
 import org.junit.jupiter.params.ParameterizedTest;

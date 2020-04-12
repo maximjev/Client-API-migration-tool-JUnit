@@ -1,8 +1,8 @@
 package impl.matcher;
 
-import api.entity.types.MigrationUnitWithIdentifier;
+import api.type.MigrationUnitWithIdentifier;
 import com.github.javaparser.ast.expr.SimpleName;
-import impl.api.MigrationMatcher;
+import impl.MigrationMatcher;
 
 public class SimpleNameIdentifierMatcher extends MigrationMatcher<MigrationUnitWithIdentifier, SimpleName> {
     protected boolean match(SimpleName node, MigrationUnitWithIdentifier unit) {

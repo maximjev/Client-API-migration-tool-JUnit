@@ -1,7 +1,6 @@
 package impl.service;
 
 import api.entity.MigrationUnitType;
-import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.NodeList;
@@ -10,10 +9,9 @@ import com.github.javaparser.ast.expr.*;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.Statement;
-import impl.api.MigrationService;
+import impl.MigrationService;
 import impl.entity.CustomMigrationUnit;
 import impl.entity.ImportDeclarationUnit;
-import impl.type.MigrationUnitImpl;
 
 import java.util.List;
 import java.util.Map;

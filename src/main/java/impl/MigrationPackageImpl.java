@@ -1,7 +1,7 @@
-package impl.changeset;
+package impl;
 
 import api.entity.MigrationUnit;
-import api.service.MigrationPackage;
+import api.tool.MigrationPackage;
 
 import java.util.List;
 

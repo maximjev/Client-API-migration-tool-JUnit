@@ -1,9 +1,9 @@
 package impl.type;
 
 import api.entity.MigrationUnitName;
-import api.entity.types.MigrationUnitWithFullName;
-import api.entity.types.MigrationUnitWithIdentifier;
-import api.entity.types.MigrationUnitWithQualifier;
+import api.type.MigrationUnitWithFullName;
+import api.type.MigrationUnitWithIdentifier;
+import api.type.MigrationUnitWithQualifier;
 
 import java.util.Optional;
 

@@ -1,8 +1,8 @@
-package impl.api;
+package impl;
 
 import api.entity.MigrationUnit;
 import api.entity.MigrationUnitType;
-import api.service.MigrationPackage;
+import api.tool.MigrationPackage;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;

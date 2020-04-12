@@ -1,10 +1,10 @@
 package main;
 
-import api.service.MigrationPackage;
-import exception.FileProcessingException;
+import api.tool.MigrationPackage;
+import general.exception.FileProcessingException;
 import impl.tool.MigrationToolImpl;
 import junit.JUnitMigrationPackage;
-import processor.FileProcessor;
+import general.processor.FileProcessor;
 
 public class Main {
 

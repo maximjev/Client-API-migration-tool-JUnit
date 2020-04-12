@@ -1,4 +1,4 @@
-package impl.api;
+package impl;
 
 import api.entity.MigrationUnit;
 import impl.matcher.*;

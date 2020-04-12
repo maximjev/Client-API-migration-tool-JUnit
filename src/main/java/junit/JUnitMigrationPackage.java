@@ -2,9 +2,9 @@ package junit;
 
 import api.entity.MigrationUnit;
 import api.entity.MigrationUnitArg;
-import api.service.MigrationPackage;
+import api.tool.MigrationPackage;
 import com.google.common.collect.Streams;
-import impl.changeset.MigrationPackageImpl;
+import impl.MigrationPackageImpl;
 import impl.entity.CustomMigrationUnit;
 import impl.entity.MarkerAnnotationUnit;
 import impl.entity.MethodCallArgUnit;

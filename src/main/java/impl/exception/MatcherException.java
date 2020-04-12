@@ -1,4 +1,4 @@
-package exception;
+package impl.exception;
 
 public class MatcherException extends RuntimeException {
 

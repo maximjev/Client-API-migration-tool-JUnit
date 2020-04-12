@@ -1,7 +1,7 @@
-package api.service;
+package api.tool;
 
 
-import impl.api.MigrationService;
+import impl.MigrationService;
 
 public interface MigrationTool {
     String migrate(String code);

@@ -1,6 +1,6 @@
 package calc;
 
-import exception.CalculatorException;
+import general.exception.CalculatorException;
 import impl.Calculator;
 import org.junit.*;
 
