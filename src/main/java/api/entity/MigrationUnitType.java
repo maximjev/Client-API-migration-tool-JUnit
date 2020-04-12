@@ -1,5 +1,5 @@
 package api.entity;
 
 public enum MigrationUnitType {
-    MARKER_ANNOTATION, CUSTOM, METHOD_CALL
+    IMPORT_DECLARATION, MARKER_ANNOTATION, CUSTOM, METHOD_CALL
 }

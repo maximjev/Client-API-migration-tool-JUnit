@@ -1,20 +1,27 @@
 package impl.service;
 
-import api.entity.MigrationUnit;
 import api.entity.MigrationUnitType;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import impl.api.MigrationService;
+import impl.entity.ImportDeclarationUnit;
 import impl.entity.MethodCallUnit;
 import impl.type.MigrationUnitImpl;
+
+import java.util.Set;
 
 import static api.entity.MigrationUnitType.*;
 
 public class ImportDeclarationMigrationService extends MigrationService<MigrationUnitImpl, ImportDeclaration> {
 
+    private static Set<MigrationUnitType> SUPPORTED_TYPES = Set.of(
+      MARKER_ANNOTATION,
+      METHOD_CALL,
+      IMPORT_DECLARATION
+    );
+
     protected boolean supports(MigrationUnitType unitType) {
-        return MARKER_ANNOTATION.equals(unitType) ||
-                METHOD_CALL.equals(unitType);
+        return SUPPORTED_TYPES.contains(unitType);
     }
 
     @Override

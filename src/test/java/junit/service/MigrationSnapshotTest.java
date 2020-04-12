@@ -28,7 +28,7 @@ public class MigrationSnapshotTest {
             "AssertEqualsStaticAsterisk",
             "AssertEqualsText"
     })
-    void assertions(String testcaseName) throws Exception {
+    void assertionsTests(String testcaseName) throws Exception {
         String testScope = "assertions";
         Path actual = Paths.get(String.format(ACTUAL_DIRECTORY, testScope), testcaseName + JAVA);
         Path expected = Paths.get(String.format(EXPECTED_DIRECTORY, testScope), testcaseName + JAVA);
@@ -41,7 +41,7 @@ public class MigrationSnapshotTest {
             "AssumeTrueStatic",
             "AssumeTrueStaticAsterisk"
     })
-    void assumptions(String testcaseName) throws Exception {
+    void assumptionsTests(String testcaseName) throws Exception {
         String testScope = "assumptions";
         Path actual = Paths.get(String.format(ACTUAL_DIRECTORY, testScope), testcaseName + JAVA);
         Path expected = Paths.get(String.format(EXPECTED_DIRECTORY, testScope), testcaseName + JAVA);
@@ -62,7 +62,7 @@ public class MigrationSnapshotTest {
             "BeforeEachAsterisk",
             "BeforeAndAfterEachAsterisk"
     })
-    void annotations(String testcaseName) throws Exception {
+    void annotationsTests(String testcaseName) throws Exception {
         String testScope = "annotations";
         Path actual = Paths.get(String.format(ACTUAL_DIRECTORY, testScope), testcaseName + JAVA);
         Path expected = Paths.get(String.format(EXPECTED_DIRECTORY, testScope), testcaseName + JAVA);
@@ -76,8 +76,21 @@ public class MigrationSnapshotTest {
             "AssertThrowsWithAsteriskImport",
             "AssertThrowsWithStaticImport"
     })
-    void custom(String testcaseName) throws Exception {
+    void customTests(String testcaseName) throws Exception {
         String testScope = "custom";
+        Path actual = Paths.get(String.format(ACTUAL_DIRECTORY, testScope), testcaseName + JAVA);
+        Path expected = Paths.get(String.format(EXPECTED_DIRECTORY, testScope), testcaseName + JAVA);
+        assertEquals(Files.readString(expected), tool.migrate(Files.readString(actual)));
+    }
+
+    @ParameterizedTest(name = "{0} test")
+    @ValueSource(strings = {
+            "CalculatorTest",
+            "FunctionsTest",
+            "AlreadyMigratedTest"
+    })
+    void calculatorTests(String testcaseName) throws Exception {
+        String testScope = "calculator";
         Path actual = Paths.get(String.format(ACTUAL_DIRECTORY, testScope), testcaseName + JAVA);
         Path expected = Paths.get(String.format(EXPECTED_DIRECTORY, testScope), testcaseName + JAVA);
         assertEquals(Files.readString(expected), tool.migrate(Files.readString(actual)));

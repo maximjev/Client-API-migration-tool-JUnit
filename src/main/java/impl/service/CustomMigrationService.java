@@ -12,7 +12,10 @@ import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import impl.api.MigrationService;
 import impl.entity.CustomMigrationUnit;
+import impl.entity.ImportDeclarationUnit;
+import impl.type.MigrationUnitImpl;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -72,8 +75,8 @@ public class CustomMigrationService extends MigrationService<CustomMigrationUnit
         if (node.getBody().isPresent()) {
             node.setBody(constructNewBody(node.getBody().get(), pair.getValue(), params));
         }
-
-        if (!hasImport(cu, params)) {
+        ImportDeclarationUnit unit = new ImportDeclarationUnit(params.get("originalImport"), params.get("newImport"));
+        if (!hasImport(cu, unit)) {
             cu.addImport(new ImportDeclaration(params.get("newImport"), false, false));
         }
     }
@@ -93,14 +96,8 @@ public class CustomMigrationService extends MigrationService<CustomMigrationUnit
         return new BlockStmt(methodStatements);
     }
 
-    private boolean hasImport(CompilationUnit cu, Map<String, String> params) {
-        return hasImport(cu, params.get("oldImport"));
-    }
-
-    private boolean hasImport(CompilationUnit cu, String importParam) {
-        return cu.findAll(ImportDeclaration.class,
-                n -> matcher.anyPatternMatch(n.getName(), importParam, "QN")
-                        && ((n.isStatic() && n.isAsterisk()) || !n.isStatic())).size() > 0;
+    private boolean hasImport(CompilationUnit cu, ImportDeclarationUnit unit) {
+        return cu.findAll(ImportDeclaration.class, n -> matcher.anyMatch(n.getName(), List.of(unit), "QN")).size() > 0;
     }
 
     @Override

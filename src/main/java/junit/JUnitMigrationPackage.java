@@ -47,7 +47,7 @@ public class JUnitMigrationPackage {
         params.put("annotation", "Test");
         params.put("keyParam", "expected");
         params.put("newImport", "org.junit.jupiter.api.Assertions");
-        params.put("oldImport", "org.junit.Assert");
+        params.put("originalImport", "org.junit.Assert");
         params.put("scope", "Assertions");
         params.put("method", "assertThrows");
 

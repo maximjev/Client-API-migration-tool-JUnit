@@ -33,11 +33,9 @@ public class MethodCallMigrationService extends MigrationService<MethodCallUnit,
         MethodCallUnit unit = (MethodCallUnit) matcher.find(node.getName(), units, "I");
 
         Expression scope = resolveScope(node, unit);
-        NodeList<Expression> arguments = resolveArgumentPositions(node.getArguments(), unit.getArguments());
-
-        MethodCallExpr newMethodCall = new MethodCallExpr(scope, unit.getNewIdentifier(), arguments);
-        node.replace(newMethodCall);
-        cu.replace(node, newMethodCall);
+        node.setScope(scope);
+        node.setName(unit.getNewIdentifier());
+        resolveArgumentPositions(node.getArguments(), unit.getArguments());
     }
 
     private Expression resolveScope(MethodCallExpr node, MethodCallUnit unit) {
@@ -45,17 +43,20 @@ public class MethodCallMigrationService extends MigrationService<MethodCallUnit,
                 .orElse(null);
     }
 
-    private NodeList<Expression> resolveArgumentPositions(NodeList<Expression> nodeList, List<MigrationUnitArg> arguments) {
+    private void resolveArgumentPositions(NodeList<Expression> nodeList, List<MigrationUnitArg> arguments) {
         if (!validateArguments(nodeList, arguments)) {
-            return nodeList;
+            return;
         }
 
         NodeList<Expression> newNodeList = new NodeList<>();
-        newNodeList.addAll(arguments.stream()
+        arguments.stream()
                 .sorted(Comparator.comparing(MigrationUnitArg::getNewPosition))
-                .map(a -> nodeList.get(a.getOriginalPosition() - 1))
-                .collect(Collectors.toList()));
-        return newNodeList;
+                .forEach(a -> {
+                    Expression arg = nodeList.get(a.getOriginalPosition() - 1);
+                    newNodeList.add(a.getNewPosition()- 1, arg);
+                });
+        nodeList.removeAll(newNodeList);
+        nodeList.addAll(newNodeList);
     }
 
     private boolean validateArguments(NodeList<Expression> nodeList, List<MigrationUnitArg> arguments) {
@@ -78,6 +79,7 @@ public class MethodCallMigrationService extends MigrationService<MethodCallUnit,
     }
 
     private boolean hasImport(CompilationUnit cu, List<MethodCallUnit> units) {
-        return !(cu.findAll(ImportDeclaration.class, n -> matcher.anyMatch(n.getName(), units, "QN")).isEmpty());
+        return true;
+//        return !(cu.findAll(ImportDeclaration.class, n -> matcher.anyMatch(n.getName(), units, "QN")).isEmpty());
     }
 }
