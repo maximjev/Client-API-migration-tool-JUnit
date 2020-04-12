@@ -1,11 +1,10 @@
 package junit.service;
 
+import api.service.MigrationTool;
 import impl.tool.MigrationToolImpl;
 import junit.JUnitMigrationPackage;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import api.service.MigrationTool;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
