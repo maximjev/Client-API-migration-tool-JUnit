@@ -12,7 +12,7 @@ compileJava {
 
 task fatJar(type: Jar) {
     manifest {
-        attributes 'Implementation-Title': 'JUnit-4-to-5-migration',
+        attributes 'Implementation-Title': 'Client-API-migration-tool-JUnit',
                 'Implementation-Version': version,
                 'Main-Class': 'main.Main'
     }

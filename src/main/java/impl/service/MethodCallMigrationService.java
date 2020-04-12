@@ -2,7 +2,6 @@ package impl.service;
 
 import api.entity.MigrationUnitArg;
 import api.entity.MigrationUnitType;
-import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.ImportDeclaration;
 import com.github.javaparser.ast.NodeList;
@@ -93,7 +92,6 @@ public class MethodCallMigrationService extends MigrationService<MethodCallUnit,
     }
 
     private boolean hasImport(CompilationUnit cu, List<MethodCallUnit> units) {
-//        return true;
         return !(cu.findAll(ImportDeclaration.class, n -> matcher.anyMatch(n.getName(), units, "QN")).isEmpty());
     }
 }
