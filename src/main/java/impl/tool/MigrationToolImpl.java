@@ -6,6 +6,8 @@ import com.github.javaparser.printer.lexicalpreservation.LexicalPreservingPrinte
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.model.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 import impl.api.MigrationService;
 import impl.service.*;
 import api.service.MigrationPackage;
@@ -39,7 +41,9 @@ public class MigrationToolImpl implements MigrationTool {
     }
 
     private void configure() {
-        TypeSolver typeSolver = new CombinedTypeSolver();
+        CombinedTypeSolver typeSolver = new CombinedTypeSolver();
+        TypeSolver javaParserTypeSolver = new ReflectionTypeSolver();
+        typeSolver.add(javaParserTypeSolver);
         JavaSymbolSolver symbolSolver = new JavaSymbolSolver(typeSolver);
         StaticJavaParser.getConfiguration().setSymbolResolver(symbolSolver);
     }

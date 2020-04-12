@@ -2,6 +2,7 @@ package junit.service;
 
 import impl.tool.MigrationToolImpl;
 import junit.JUnitMigrationPackage;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import api.service.MigrationTool;
@@ -72,9 +73,10 @@ public class MigrationSnapshotTest {
     @ParameterizedTest(name = "{0} test")
     @ValueSource(strings = {
             "AssertThrows",
-            "AssertThrowsWithImport",
-            "AssertThrowsWithAsteriskImport",
-            "AssertThrowsWithStaticImport"
+            "AssertThrowsImport",
+            "AssertThrowsAsteriskImport",
+            "AssertThrowsStaticImport",
+            "AssertThrowsStaticAsteriskImport"
     })
     void customTests(String testcaseName) throws Exception {
         String testScope = "custom";
@@ -87,7 +89,8 @@ public class MigrationSnapshotTest {
     @ValueSource(strings = {
             "CalculatorTest",
             "FunctionsTest",
-            "AlreadyMigratedTest"
+            "AlreadyMigratedTest",
+            "CommentCalculatorTest"
     })
     void calculatorTests(String testcaseName) throws Exception {
         String testScope = "calculator";

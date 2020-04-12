@@ -7,9 +7,21 @@ import impl.api.MigrationMatcher;
 
 public class NameQualifierMatcher extends MigrationMatcher<MigrationUnitWithQualifier, Name> {
     protected boolean match(Name node, MigrationUnitWithQualifier unit) {
+        return presentCheck(node, unit) && (matchesMethodQualifier(node, unit) || matchesClassQualifier(node, unit));
+    }
+
+    private boolean presentCheck(Name node, MigrationUnitWithQualifier unit) {
         return unit.getOriginalQualifier().isPresent()
-                && node.getQualifier().isPresent()
-                && unit.getOriginalQualifier().get().getName().equals(node.toString());
+                && unit.getOriginalQualifier().get().getQualifier().isPresent()
+                && node.getQualifier().isPresent();
+    }
+
+    private boolean matchesMethodQualifier(Name node, MigrationUnitWithQualifier unit) {
+        return unit.getOriginalQualifier().get().getQualifier().get().getName().equals(node.toString());
+    }
+
+    private boolean matchesClassQualifier(Name node, MigrationUnitWithQualifier unit) {
+        return unit.getOriginalQualifier().get().getName().equals(node.toString());
     }
 
     @Override

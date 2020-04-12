@@ -21,12 +21,12 @@ public class JUnitMigrationPackage {
     public static MigrationPackage getInstance() {
 
         List<MigrationUnitArg> threeArgs = Arrays.asList(
-                new MethodCallArgUnit(1, 3),
+                new MethodCallArgUnit("java.lang.String", 1, 3),
                 new MethodCallArgUnit(2, 1),
                 new MethodCallArgUnit(3, 2)
         );
         List<MigrationUnitArg> twoArgs = Arrays.asList(
-                new MethodCallArgUnit(1, 2),
+                new MethodCallArgUnit("java.lang.String", 1, 2),
                 new MethodCallArgUnit(2, 1)
         );
 
